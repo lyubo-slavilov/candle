@@ -1,0 +1,2 @@
+﻿Candle е прост {%MVC%} (Model View Controller) фреймуърк написан на езика PHP.
+10 + 12 = {%22%}
