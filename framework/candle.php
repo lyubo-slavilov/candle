@@ -1,6 +1,8 @@
 <?php
 
 
+use Candle\Exception\InvalidControllerOrActionException;
+
 use Candle\Http\Response;
 
 use Candle\Config;
@@ -79,9 +81,8 @@ try {
     }
     if ($ex instanceof HttpRedirectException) {
         header('Location: ' . $ex->getUrl());
-        die('Location: ' . $ex->getUrl());
     }
-    if ($ex instanceof Error404Exception) {
+    if ($ex instanceof Error404Exception || $ex instanceof InvalidControllerOrActionException) {
         $errorAction = Config::get('wick.error404');
         $fallbackHttpStatus = '404: Not Found';
         $fallbackCode = 404;
