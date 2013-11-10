@@ -1,5 +1,6 @@
 <?php
 
+
 use Candle\Http\Response;
 
 use Candle\Config;
@@ -8,6 +9,7 @@ use Candle\Url\Router;
 
 use Candle\Exception\Error404Exception;
 use Candle\Exception\HttpRedirectException;
+use Candle\Exception\BootstrapException;
 
 use Candle\Http\Request;
 
@@ -32,9 +34,9 @@ function candleExec($controller, $action = null)
     ob_start();
     
     $bootstrap->run($controller, $action);
-    $content = ob_get_contents();
+    $content = ob_get_clean();
     
-    ob_end_clean();
+    //ob_end_clean();
     
     Response::getInstance()->setContent($content);
     Response::getInstance()->send();
@@ -43,15 +45,10 @@ function candleExec($controller, $action = null)
 
 
 //Deal with catchable PHP errors
-set_error_handler(function ($errno , $errstr, $errfile = null, $errline = null, array $errcontext = array()) {
-    //forward all errors to error500 page
+$handled = false;
+set_error_handler(function ($errno , $errstr, $errfile = null, $errline = null, array $errcontext = array() ) use (&$handled) {
     
-    $ex = new Exception("{$errno}: {$errstr} at {$errfile} {$errline}");
-    Request::getInstance()->setParam('exception', $ex);
-    
-    candleExec(Config::get('wick.error500'));
-    
-    return true;
+    throw new BootstrapException("{$errno}: {$errstr} at {$errfile} {$errline}");
     
 }, E_ALL);
 
@@ -86,12 +83,24 @@ try {
     }
     if ($ex instanceof Error404Exception) {
         $errorAction = Config::get('wick.error404');
+        $fallbackHttpStatus = '404: Not Found';
+        $fallbackCode = 404;
     } else {
         $errorAction = Config::get('wick.error500');
+        $fallbackHttpStatus = '500: Internal Server Error';
+        $fallbackCode = 500;
     }
     $request->setParam('exception', $ex);
     
-    candleExec($errorAction);
-    
+    try {
+        candleExec($errorAction);
+    } catch (\Exception $ex) {
+        //It must be
+        //InvalidControllerOrActionException 
+        //or BootstrapException
+        //nothing can be done
+        header("HTTP/1.1 {$fallbackHttpStatus}", true, $fallbackCode);
+        echo "<h1>HTTP {$fallbackHttpStatus}</h1>";
+    }
 }
     

@@ -13,7 +13,8 @@
 You can try several things to check if everithing is properly setted up
 <ul>
     <li><a href="<?php echo $this->url('home');?>blah">Link to unexisting page</a> - this sould show HTTP 404</li>
-    <li><a href="<?php echo $this->url('default', array('controller' => 'tester', 'action'=>'dbcheck'));?>">DB connection test</a> - check your DB settings (development in progress)</li>
+    <li><a href="<?php echo $this->url('tester', array('action'=>'internalError'));?>">Internal error</a> - this sould show HTTP 500</li>
+    <li><a href="<?php echo $this->url('tester', array('action'=>'dbcheck'));?>">DB connection test</a> - check your DB settings (development in progress)</li>
     <?php if (CANDLE_ENVIRONMENT == 'prod'): ?>
         <li><a href="/demo_dev.php">Switch to DEV mode</a></li>
     <?php else: ?>

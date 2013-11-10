@@ -8,5 +8,10 @@ $router->rule('^/?$', 'home', array(
     'action' => 'default',
 ));
 
+
+$router->rule('/tester/:action', 'tester', array(
+    'controller' => 'tester'
+));
+
 //remove before production!
 $router->rule('/:controller/:action/?', 'default');

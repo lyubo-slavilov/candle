@@ -9,6 +9,10 @@
  */
 namespace Candle;
 
+use Candle\Exception\BootstrapException;
+
+use Candle\Exception\InvalidControllerOrActionException;
+
 use Candle\Exception\AutoloaderErrorException;
 
 use Candle\Exception\ControllerForwardException;
@@ -52,12 +56,12 @@ class Bootstrap {
         try {
             $controller = new $controllerClassName();
         } catch (AutoloaderErrorException $ex) {
-            throw new Error404Exception('Invalid controller: ' . $controllerClassName);
+            throw new InvalidControllerOrActionException('Invalid controller: ' . $controllerClassName);
         }
         
         
         if(! $controller instanceof Controller\AbstractController){
-            throw new \Exception("Controllers must instantiate the AbstractContrtoller");
+            throw new BootstrapException("Controllers must instantiate the AbstractContrtoller");
         }
         
         return $controller;
@@ -73,7 +77,7 @@ class Bootstrap {
         $request = Request::getInstance();
         $forwardChain = $request->getParam('forward_chain', array());
         if (count($forwardChain) > 5) {
-            throw new \Exception('Too many forwards');
+            throw new BootstrapException('Too many forwards');
         }
         
         $forwardChain[] = $this->controller;
@@ -113,7 +117,7 @@ class Bootstrap {
         }
         
         if ( ! method_exists($this->controller, $actionName)) {
-            $ex = new Error404Exception('Invalid action: ' . $actionName);
+            $ex = new InvalidControllerOrActionException('Invalid action: ' . $actionName);
             throw $ex;
         }
         
