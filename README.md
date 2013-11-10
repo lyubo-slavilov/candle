@@ -1,4 +1,4 @@
-candle
+Candle
 ======
 
 Simple PHP MVC framework with its own ORM
