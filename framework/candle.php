@@ -77,7 +77,9 @@ try {
     
     //Deal with exceptions
     
-    ob_end_clean();
+    if (ob_get_level()) {
+        ob_end_clean();
+    }
     if ($ex instanceof HttpRedirectException) {
         header('Location: ' . $ex->getUrl());
         die('Location: ' . $ex->getUrl());

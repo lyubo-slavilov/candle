@@ -58,7 +58,7 @@ spl_autoload_register(function($className){
         if (file_exists($filename)) {
             require $filename;
         } else {
-            require_once __DIR__ . '/Exception/AutoloaderError.php';
+            require_once __DIR__ . '/Exception/AutoloaderErrorException.php';
             throw new Candle\Exception\AutoloaderErrorException("Class '{$className}' not found");
         }
     }

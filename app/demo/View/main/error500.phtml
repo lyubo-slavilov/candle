@@ -1,0 +1,29 @@
+<?php if (CANDLE_ENVIRONMENT == 'dev'):?>
+<?php 
+    $exClass = get_class($this->exception);
+    $parts = explode('\\', $exClass);
+    $exClass = array_pop($parts);
+?>
+    <div style="background: silver;">
+        <h3>Uncought <span style="color: maroon;"><?php echo $exClass; ?></span>: "<?php echo $this->exception->getMessage(); ?>"</h3>
+        <pre style="font-size: 11px;"><?php 
+            $trace =  $this->exception->getTraceAsString();
+            echo str_replace(CANDLE_INSTALL_DIR, '', $trace);
+        ?></pre>
+    </div>
+<?php endif; ?>
+<div class="letter">
+    <p class="dear part">Скъпи ти,</p>
+    <p class="text part"> 
+        <span class="text-holder">
+        Нещо ужасно се обърка и в системата на сайта настъпи грандиозна паника. <br/>
+        Моля, не се сърди и ако имаш достатъчно търпение опитай същото малко по-късно.<br/>
+        </span>
+    </p>
+    <p class="text part" style="margin-top: 10px;">
+         <span class="text-holder">Между другото, една ругатня по адрес на програмистите може да помогне...</span>
+    </p>
+    <p class="sincerely part">
+        С уважение, <b>HTTP 500 - Internal Server Error</b>
+    </p>
+</div>

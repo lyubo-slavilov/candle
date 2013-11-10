@@ -1,0 +1,25 @@
+<h2>Hello</h2>
+<p>This is the default demo homepage</p>
+<p>You can check the sorce to see how the controllers work.</p>
+
+<h2>
+    Important stuff:
+</h2>
+<ul>
+    <li><code>framework/config/config.ini</code> - Put your DB connection settings here</li>
+    <li><code>app/config.ini</code> - Put your default layout and error pages template information here</li>
+</ul>
+<h2>Try outs</h2>
+You can try several things to check if everithing is properly setted up
+<ul>
+    <li><a href="<?php echo $this->url('home');?>blah">Link to unexisting page</a> - this sould show HTTP 404</li>
+    <li><a href="<?php echo $this->url('default', array('controller' => 'tester', 'action'=>'dbcheck'));?>">DB connection test</a> - check your DB settings (development in progress)</li>
+    <?php if (CANDLE_ENVIRONMENT == 'prod'): ?>
+        <li><a href="/demo_dev.php">Switch to DEV mode</a></li>
+    <?php else: ?>
+        <li><a href="/demo.php">Switch to PRODUCTION mode</a></li>
+    <?php endif; ?>
+</ul>
+<p>
+Make shure you tested everithing on both PROD and DEV mode :)
+</p>

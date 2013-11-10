@@ -9,4 +9,4 @@ $router->rule('^/?$', 'home', array(
 ));
 
 //remove before production!
-$router->rule('/:controller/:action/?');
+$router->rule('/:controller/:action/?', 'default');

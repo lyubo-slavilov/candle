@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<buildpath>
+	<buildpathentry kind="src" path="app/demo"/>
+	<buildpathentry kind="src" path="framework"/>
+	<buildpathentry kind="src" path="lib/CatchYa"/>
+	<buildpathentry kind="src" path="lib/Flame"/>
+	<buildpathentry kind="src" path="lib/Service"/>
+	<buildpathentry kind="src" path="lib/Spark"/>
+	<buildpathentry kind="src" path="web"/>
+	<buildpathentry kind="con" path="org.eclipse.php.core.LANGUAGE"/>
+</buildpath>

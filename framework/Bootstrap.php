@@ -52,7 +52,7 @@ class Bootstrap {
         try {
             $controller = new $controllerClassName();
         } catch (AutoloaderErrorException $ex) {
-            throw new Error404Exception('Invalid controller');
+            throw new Error404Exception('Invalid controller: ' . $controllerClassName);
         }
         
         
@@ -113,7 +113,7 @@ class Bootstrap {
         }
         
         if ( ! method_exists($this->controller, $actionName)) {
-            $ex = new Error404Exception('Invalid action');
+            $ex = new Error404Exception('Invalid action: ' . $actionName);
             throw $ex;
         }
         
