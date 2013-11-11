@@ -81,6 +81,7 @@ try {
     }
     if ($ex instanceof HttpRedirectException) {
         header('Location: ' . $ex->getUrl());
+        die();
     }
     if ($ex instanceof Error404Exception || $ex instanceof InvalidControllerOrActionException) {
         $errorAction = Config::get('wick.error404');
