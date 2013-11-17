@@ -92,6 +92,22 @@ abstract class AbstractController {
         return $result;
     }
     
+    protected function renderComponent($controllerName, $action, $params = array())
+    {
+        $oldTemplate = $this->templateName;
+        $oldController = $this->controllerName;
+    
+        $this->setTemplate($template, $controllerName);
+        $v = new View($params);
+    
+        $result =  $v->renderComponent($controller, $action, $params);
+    
+        $this->templateName = $oldTemplate;
+        $this->controllerName = $oldController;
+    
+        return $result;
+    }
+    
     /**
      * Executes an action
      * @param string $actionName

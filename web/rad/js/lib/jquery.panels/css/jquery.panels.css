@@ -1,0 +1,125 @@
+body{
+	overflow: hidden;
+	background: #1a1a1a;
+	font-size: 12px;
+}
+
+#panels{
+	width: 100%;
+	height: 100%;
+	position: relative;
+}
+
+.ui-panel{
+	position: absolute;
+	overflow: visible;
+	hhhbackground: #F5F5F5;
+	box-shadow: 1px 1px 0 #737373 inset;
+	border: none !important;
+	border-radius: 2px;
+	
+}
+.ui-panel .ui-widget-header{
+	border-style: solid none;
+	font-weight: normal;
+	box-shadow: 0px 1px 0px #595959 inset;
+	padding:2px 5px;
+	text-shadow: 0 -1px 0 #1a1a1a;
+}
+.ui-panel-divider{
+	position: absolute;
+	z-index: 10000;
+	
+}
+.ui-panel-divider-h{
+	width: 100%;
+	height: 2px;
+	cursor: s-resize;
+}
+.ui-panel-divider-v{
+	width: 2px;
+	height: 100%;
+	cursor: w-resize;
+}
+.ui-panel-handle-container{
+	height: 26px;
+	width: 26px;
+	position: absolute;
+	top: 1px;
+	right: 1px;
+	background: url(./img/panel-handles-default.png) no-repeat;
+	z-index: 10;
+}
+
+.ui-panel-handle-container:hover{
+	background-image: url(./img/panel-handles-active.png);
+}
+.ui-panel-handle-container-active{
+	background-image: url(./img/panel-handles-active.png);
+}
+.ui-panel-handle{
+	position: absolute;
+	opacity: 0.5;
+	
+}
+.ui-panel-handle-h{
+	top: 0px;
+	width: 20px;
+	right: 18px;
+	height: 16px;
+	cursor: w-resize;
+}
+.ui-panel-handle-v{
+	top: 18px;
+	width: 16px;
+	right: 0px;
+	height: 20px;
+	cursor: s-resize;
+	
+}
+.ui-panel-handle-combine{
+	width: 15px;
+	height: 15px;
+	right: 0px;
+	top: 0px;
+	cursor: crosshair;
+}
+.ui-panel-combiner-helper-text{
+	position: absolute;
+	z-index: 20;
+	height: 40px;
+	line-height: 40px;
+	color: #e6a800;
+	background: #1a1a1a;
+	border: 1px solid black;
+	box-shadow: 0 0 13px #1a1a1a;
+	padding: 0 5px;
+}
+.ui-panel-combiner-helper{
+	position: absolute;
+}
+.ui-panel-combiner-helper-h{
+	width: 51px;
+	height: 27px;
+	background: url(./img/panel-combiner-arrows-h.png) 0 0;
+}
+.ui-panel-combiner-helper-v{
+	width: 27px;
+	height: 52px;
+	background: url(./img/panel-combiner-arrows-v.png) 0 0;
+}
+.ui-panel-combiner-helper-h.opposite{
+	background-position: 0 -28px;
+}
+
+.ui-panel-combiner-helper-v.opposite{
+	background-position: -27px 0;
+}
+
+.ui-panel-content{
+	box-sizing: border-box;
+	height: 100%;
+	padding-bottom: 20px;
+	overflow: hidden;
+	position: relative;
+}

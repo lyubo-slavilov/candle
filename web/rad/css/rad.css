@@ -1,0 +1,93 @@
+html, body{
+	margin: 0px;
+	width: 100%;
+	height: 100%;
+	font-family: Arial,Helvetica,Verdana,sans-serif;
+}
+
+.ui-panel-content{
+	position: absolute;
+	height: auto;
+	top: 22px;
+	bottom: 0px;
+	width: 100%;
+}
+.panel-body.white{
+	width: 80%;
+	margin: 30px auto;
+	background: #E4E4E4;
+	box-shadow: 0 0 20px rgba(0,0,0,0.8);
+	color: #1A1A1A;
+	padding: 10px;
+	position: relative;
+}
+.jspVerticalBar{
+	background: none;
+	width: 10px;
+}
+.jspVerticalBar .jspTrack{
+	width:0px;
+	border-left: 1px solid #1a1a1a;
+	border-right: 1px solid #737373;
+}
+.jspVerticalBar .jspTrack .jspDrag{
+	width: 6px;
+	left: -3px;
+	border-radius: 3px;
+	background: #434343;
+}
+.jspCap{
+	display: block;
+}
+.jspCapTop{
+	height: 30px;
+}
+.jspCapBottom{
+	height: 30px;
+}
+.ui-buttonset{
+	margin: 0px;
+	padding: 0px;
+	float: left;
+	margin-right: 20px;
+}
+.ui-buttonset li{
+	display: inline-block;
+}
+.ui-buttonset .ui-button-text-only{
+	border-style: solid none;
+	margin: 0;
+}
+.ui-buttonset .ui-corner-left{
+	border-left-style: solid; 
+	margin-left: 2px;
+}
+.ui-buttonset .ui-corner-right{
+	border-right-style: solid; 
+}
+
+.ui-panel-switch{
+	width: 200px;
+}
+.ui-selectmenu-menu{
+	box-shadow: 0 3px 12px rgba(0,0,0,1);
+}
+.ui-panel-header a.ui-selectmenu{
+	width:17px !important;
+	height:13px; 
+	margin-top:-5px;
+	margin-right:5px;
+}
+.ui-panel-header span.ui-selectmenu-icon{
+	display: none;
+}
+.ui-panel-header span.ui-selectmenu-status{
+	margin-left: 0;
+}
+.ui-panel-header span.ui-selectmenu-item-icon{
+	top: 6px;
+}
+
+a.dark {
+	color: #2a2a3a;
+}
