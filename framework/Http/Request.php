@@ -143,6 +143,10 @@ class Request {
         }
     }
     
+    public function clearParam($name)
+    {
+         unset($this->params[$name]);   
+    }
     
     /**
      * Gets the client IP address

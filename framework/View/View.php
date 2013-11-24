@@ -9,6 +9,8 @@
  */
 namespace Candle\View;
 
+use Candle\Http\Response;
+
 use Candle\Url\Generator;
 
 use Candle\Http\Request;
@@ -106,7 +108,9 @@ class View {
     public function renderComponent($controller, $action, $params = array())
     {
         $bootstrap = new Bootstrap();
-        return $bootstrap->run($controller, $action, true);
+        Request::getInstance()->setParam('component', $params);
+        $result =  $bootstrap->run($controller, $action, true);
+        Request::getInstance()->clearParam('component');
     }
     
     /**
