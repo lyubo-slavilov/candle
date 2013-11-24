@@ -1,0 +1,8 @@
+<?php
+        
+define('CANDLE_WEB_DIR', __DIR__ );
+define('CANDLE_APP_NAME', '%APP%');
+define('CANDLE_ENVIRONMENT', '%ENV%');
+        
+        
+require_once __DIR__.'/../framework/candle.php';

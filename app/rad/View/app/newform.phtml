@@ -1,0 +1,27 @@
+<div style="width: 400px;">
+    <form class="automatic" action="<?php echo $this->url('app-create'); ?>">
+        <h2>General</h2>
+        <p>
+            <label>Application Name<br/>
+                <input type="text"  name="app[name]" placeholder="Example: MyApplication"/>
+            </label>
+        </p>
+        <p>
+            <label>Front Controller<br/>
+                <input type="text" name="app[fc]" placeholder="myapplication"/>
+            </label> <br/>
+            <label>
+                <input type="checkbox" name="app[withdev]" checked="checked" value="1"/> Create Front controller for development environment
+            </label> 
+        </p>
+        <h2>Additional</h2>
+        <p>
+            <label>Description<br/>
+                <input type="text" name="app[desc]" placeholder="My application is very cool"/>
+            </label>
+        </p>
+        <div class="actions">
+            <button type="submit">Create</button>
+        </div>
+    </form>
+</div>

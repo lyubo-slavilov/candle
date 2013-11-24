@@ -1,3 +1,19 @@
-<a href="#">Details</a><br/>
-<a href="#">Controllers</a><br/>
-<a href="#">Config</a><br/>
+<div class="panel-body">
+    <ul style="margin: 10px auto; width: 80%; float: none;">
+        <li><a href="#" class="ui-state-active">Details</a></li>
+        <li><a class="ajax" data-target="appcontent" data-source="app/<?php echo $this->app; ?>/controllers/" href="#">Controllers</a></li>
+        <li><a href="#">Config</a></li>
+    </ul>
+</div>
+<script>
+(function(){
+    $('.panel-appnavigation .panel-body ul').buttonsetv().find('span').width(100);
+    var buttons = $('.panel-appnavigation .panel-body ul a'); 
+    buttons.on('click', function() {
+        buttons.removeClass('ui-state-active');
+        $(this).addClass('ui-state-active');
+    });
+
+})();
+
+</script>

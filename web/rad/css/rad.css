@@ -1,93 +1,126 @@
-html, body{
+html,body {
 	margin: 0px;
 	width: 100%;
 	height: 100%;
-	font-family: Arial,Helvetica,Verdana,sans-serif;
+	font-family: Arial, Helvetica, Verdana, sans-serif;
 }
 
-.ui-panel-content{
+.ui-panel-content {
 	position: absolute;
 	height: auto;
 	top: 22px;
 	bottom: 0px;
 	width: 100%;
 }
-.panel-body.white{
+
+.panel-body.white {
 	width: 80%;
 	margin: 30px auto;
 	background: #E4E4E4;
-	box-shadow: 0 0 20px rgba(0,0,0,0.8);
+	box-shadow: 0 0 20px rgba(0, 0, 0, 0.8);
 	color: #1A1A1A;
 	padding: 10px;
 	position: relative;
 }
-.jspVerticalBar{
+
+.jspVerticalBar {
 	background: none;
 	width: 10px;
 }
-.jspVerticalBar .jspTrack{
-	width:0px;
+
+.jspVerticalBar .jspTrack {
+	width: 0px;
 	border-left: 1px solid #1a1a1a;
 	border-right: 1px solid #737373;
 }
-.jspVerticalBar .jspTrack .jspDrag{
+
+.jspVerticalBar .jspTrack .jspDrag {
 	width: 6px;
 	left: -3px;
 	border-radius: 3px;
 	background: #434343;
 }
-.jspCap{
+
+.jspCap {
 	display: block;
 }
-.jspCapTop{
+
+.jspCapTop {
 	height: 30px;
 }
-.jspCapBottom{
+
+.jspCapBottom {
 	height: 30px;
 }
-.ui-buttonset{
+
+.ui-buttonset {
 	margin: 0px;
 	padding: 0px;
 	float: left;
 	margin-right: 20px;
 }
-.ui-buttonset li{
+
+.ui-buttonset li {
 	display: inline-block;
 }
-.ui-buttonset .ui-button-text-only{
+
+.ui-buttonset .ui-button-text-only {
 	border-style: solid none;
 	margin: 0;
 }
-.ui-buttonset .ui-corner-left{
-	border-left-style: solid; 
+
+.ui-buttonset .ui-corner-left {
+	border-left-style: solid;
 	margin-left: 2px;
 }
-.ui-buttonset .ui-corner-right{
-	border-right-style: solid; 
+
+.ui-buttonset .ui-corner-right {
+	border-right-style: solid;
 }
 
-.ui-panel-switch{
+.ui-panel-switch {
 	width: 200px;
 }
-.ui-selectmenu-menu{
-	box-shadow: 0 3px 12px rgba(0,0,0,1);
+
+.ui-selectmenu-menu {
+	box-shadow: 0 3px 12px rgba(0, 0, 0, 1);
 }
-.ui-panel-header a.ui-selectmenu{
-	width:17px !important;
-	height:13px; 
-	margin-top:-5px;
-	margin-right:5px;
+
+.ui-panel-header a.ui-selectmenu {
+	width: 17px !important;
+	height: 13px;
+	margin-top: -5px;
+	margin-right: 5px;
 }
-.ui-panel-header span.ui-selectmenu-icon{
+
+.ui-panel-header span.ui-selectmenu-icon {
 	display: none;
 }
-.ui-panel-header span.ui-selectmenu-status{
+
+.ui-panel-header span.ui-selectmenu-status {
 	margin-left: 0;
 }
-.ui-panel-header span.ui-selectmenu-item-icon{
+
+.ui-panel-header span.ui-selectmenu-item-icon {
 	top: 6px;
 }
 
 a.dark {
 	color: #2a2a3a;
+}
+
+.ui-dialog form.automatic .actions {
+	visibility: hidden;
+    margin-top: -40px;
+}
+
+
+
+button.linklike {
+	background: none !important;
+	border: none !important;
+	
+}
+button.linklike:hover{
+	text-decoration: underline !important;
 }

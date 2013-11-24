@@ -17,14 +17,14 @@ $('<option>').val('Properties').addClass('ui-panel-type-properties').text('Prope
 $('<option>').val('StatusBar').addClass('ui-panel-type-statusbar').text('Status Bar').appendTo(rad.panels.switcher);
 
 
-rad.panels._getPanelRemoteContent = function(panelName, rel){
+rad.panels._getPanelRemoteContent = function(panelName, data){
 	//Change this to suite your url logic
-	if (rel) {
-		rel = '?rel=' + rel;
+	if (data) {
+		data = '?data=' + data;
 	} else {
-		rel = '';
+		data = '';
 	}
-	return '/rad.php/widget/'+panelName+rel;
+	return '/rad.php/widget/'+panelName+data;
 }
 
 rad.panels.initMainMenu = function(panel){
@@ -94,6 +94,7 @@ rad.panels._initPanel = function(panel, doNotChangeTitle){
 			rad.panels._initSwitcher(s,panel);
 			
 			rad.panels._initAjaxLinks(panel);
+			rad.panels.initDialogs(panel);
 			
 		}).error(function(){
 			$('<p>')
@@ -143,6 +144,7 @@ rad.panels._initSwitcher = function(s, panel){
 }
 
 rad.panels._initJScrollPane = function(what){
+	
 	what.jScrollPane('destroy');
 	what.jScrollPane({
 		autoReinitialise: true,
@@ -154,7 +156,27 @@ rad.panels._initJScrollPane = function(what){
 rad.panels._initAjaxLinks = function(panel){
 	$(panel).find('a.ajax').on('click', function(event){
 		event.preventDefault();
-		rad.panels.switchPanelTo(panel, $(this).attr('panel'), $(this).attr('rel'));
+		var target = $('.' + $(this).attr('data-target'));
+		if (target.length == 0) {
+			target = panel;
+		}
+		
+		if (target.is('.ui-panel')) {
+			rad.panels.switchPanelTo(target, $(this).attr('data-source'), $(this).attr('data-data'));
+		} else {
+			target.load(
+				'/rad.php/' + $(this).attr('data-source') + '?data=' +$(this).attr('data-data'),
+				function() {
+					var targetPanel = target.closest('.ui-panel');
+					var pContainer = targetPanel.find('.ui-panel-content');
+					
+					//pContainer.jScrollPane('reinitialize');
+					
+					rad.panels._initAjaxLinks(targetPanel);
+					rad.panels.initDialogs(targetPanel);
+				}
+			)
+		}
 		return false;
 	});
 }
@@ -164,4 +186,82 @@ rad.panels.switchPanelTo = function(panel, type, rel) {
 	panel.removeClass('panel-'+pd.type.toLowerCase());
 	panel.data('panel.customData', {type: type, rel: rel});
 	rad.panels._initPanel(panel, true);
+}
+
+
+rad.panels.initDialogs = function(panel) {
+	$(panel).find('a[data-action=dialog]').off('click.dialog').on('click.dialog', function(){
+		var anchor = $(this);
+		$('<div>').dialog({
+			modal: true,
+			resizable: false,
+			title: anchor.attr('title'),
+			width: 'auto',
+			open: function() {
+				var dialog = $(this);
+				dialog.load(anchor.attr('data-source'), function(){
+				
+					var form = dialog.find('form');
+					
+					var buttons = form.find('.actions button');
+					if (buttons.length > 0) {
+						var buttonsOption = [];
+						buttons.each(function(){
+							var opt = {};
+							opt[$(this).text()] = function(){form.submit()};
+							buttonsOption.push({
+								text: $(this).text(),
+								click: function(){form.submit()}
+							})
+						});
+						
+						buttonsOption.push({
+							text: 'Cancel',
+							click: function(){dialog.dialog('close')},
+							class: 'linklike'
+						})
+						dialog.dialog('option', {buttons: buttonsOption});
+					}
+					
+					form.on('submit', function(event){
+						event.preventDefault();
+						$.post(
+							form.attr('action'),
+							form.serialize()
+						).success(function(){
+							dialog.dialog('close');
+							anchor.trigger('dialogSuccess');
+						}).error(function(a, b, c){
+							console.log(a,b,c);
+							var event = $.Event();
+							event.type = 'dialogError';
+							event.dialog = dialog;
+							event.handled = false;
+							anchor.trigger(event, [a]);
+							
+							if (!event.handled) {
+								rad.alert('Something went wrong. Please try again');
+							}
+						});
+						return false;
+					});
+					dialog.dialog('option', {
+						position: {
+							my: "center",
+							at: "center",
+							of: window
+						}
+					});
+					
+					form.find('input:nth(0)').focus();
+					
+				});
+				
+			},
+			close: function(){
+				$(this).dialog('destroy');
+				$(this).remove();
+			}
+		});
+	});
 }

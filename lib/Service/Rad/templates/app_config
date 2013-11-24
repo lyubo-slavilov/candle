@@ -1,0 +1,11 @@
+[app]
+
+[meta]
+title = "%TITLE%"
+description = "%DESC%"
+keywords = ""
+
+[wick]
+error404 = main::error404
+error500 = main::error500
+default_layout = layout.phtml

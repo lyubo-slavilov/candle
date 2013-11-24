@@ -1,5 +1,19 @@
 var rad = {};
 
+rad.alert = function(message) {
+	$('<div><p class="ui-state-error" style="min-width: 250px; padding:10px">' + message + '</p></div>').dialog({
+		modal: true,
+		resizable: false,
+		width: 'auto',
+		minWidth: '250px',
+		close: function(){
+			$(this).dialog('destroy').remove();
+		},
+		buttons: [
+          {text: 'OK', click: function(){$(this).dialog('close')}}
+        ]
+	});
+}			
 
 					
 $(function(){
@@ -22,6 +36,8 @@ $(function(){
 			}
 			//panel.find('.ui-panel-header').text('W: '+data.width+', H:'+data.height);
 			if((panel.width() >= 80 && data.width < 80) || (panel.height() >= 34 && data.height < 34)) return false;
+			
+			//$('.ui-panel-content').jScrollPane('reinitialize');
 		}
 	});
 	//load the interface
@@ -48,6 +64,22 @@ $(function(){
 });
 					
 					
-					
-
+(function( $ ){
+	//plugin buttonset vertical
+	$.fn.buttonsetv = function() {
+	  $(':radio, :checkbox', this).wrap('<div style="margin: 1px"/>');
+	  $(this).buttonset();
+	  $('a:first', this).removeClass('ui-corner-left').addClass('ui-corner-top');
+	  $('a:last', this).removeClass('ui-corner-right').addClass('ui-corner-bottom');
+	  mw = 0; // max witdh
+	  $('span', this).each(function(index){
+	     w = $(this).width();
+	     if (w > mw) mw = w; 
+	  })
+	  $('span', this).each(function(index){
+	    $(this).width(mw);
+	  })
+	  return $(this);
+	};
+})( jQuery );
 

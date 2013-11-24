@@ -1,6 +1,8 @@
-<div class="panel-body white content">
-	Details for app: <?php echo $this->request->get('rel'); ?>
-</div>
+
+<h1><?php echo ucfirst($this->request->get('data')); ?> application</h1>
+<p>details</p>
+<div class="appcontent">content</div>
+
 <script>
-rad.panels.switchPanelTo($('.panel-navigation'), 'appnavigation');
+rad.panels.switchPanelTo($('.panel-navigation'), 'appnavigation',  '<?php echo $this->request->get('data')?>');
 </script>

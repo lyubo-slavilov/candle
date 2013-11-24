@@ -35,4 +35,10 @@ class WidgetController extends AbstractController {
         return array();
     }
     
+    public function processWidgetAppNavigation()
+    {
+        return array(
+          'app' => $this->getRequest()->get('data')
+        );
+    }
 }

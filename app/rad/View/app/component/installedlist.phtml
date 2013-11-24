@@ -1,3 +1,13 @@
 <?php foreach ($this->apps as $app): ?>
-<li><a href="#" class="ajax dark" panel="appdetails" rel="<?php echo $app?>"><?php echo ucfirst($app)?></a></li>
+<li><a href="#" class="ajax dark" data-target="panel-workarea .panel-body" data-source="widget/appdetails" data-data="<?php echo $app?>"><?php echo ucfirst($app)?></a></li>
 <?php endforeach;?>
+<li style="margin-top:10px"><a class="create-new-app dark" href="#" title="Create Application"  data-action="dialog" data-source="<?php echo $this->url('app-new'); ?>">Create New Application</a></li>
+<script>
+$('a.create-new-app').on('dialogSuccess', function(){
+	rad.panels.switchPanelTo($(this).closest('.ui-panel'), 'workarea');
+}).on('dialogError', function(event, response){
+	console.log(response);
+	rad.alert(response.responseText);
+	event.handled = true;
+})
+</script>
