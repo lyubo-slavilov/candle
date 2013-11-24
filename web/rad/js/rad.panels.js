@@ -165,8 +165,13 @@ rad.panels._initAjaxLinks = function(panel){
 		if (target.is('.ui-panel')) {
 			rad.panels.switchPanelTo(target, $(this).attr('data-source'), $(this).attr('data-data'));
 		} else {
+			var url = $(this).attr('data-source');
+			var prefix = '/rad.php/';
+			if (url.search('/rad.php/') == 0) {
+				prefix = '';
+			}
 			target.load(
-				'/rad.php/' + $(this).attr('data-source') + '?data=' +$(this).attr('data-data'),
+				prefix + $(this).attr('data-source') + '?data=' +$(this).attr('data-data'),
 				function() {
 					var targetPanel = target.closest('.ui-panel');
 					var pContainer = targetPanel.find('.ui-panel-content');
@@ -242,8 +247,13 @@ rad.panels.initDialogs = function(panel) {
 							anchor.trigger(event, [a]);
 							
 							if (!event.handled) {
-								rad.alert('Something went wrong. Please try again');
+								if (a.responseText == '') {
+									rad.alert('Something went wrong. Please try again');
+								} else {
+									rad.alert(a.responseText);
+								}
 							}
+							
 						});
 						return false;
 					});

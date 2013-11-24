@@ -1,0 +1,15 @@
+<?php
+namespace %APP_NS%\Controller;
+
+use Candle\Controller\AbstractController;
+
+class %CONTROLLER%Controller extends AbstractController {
+    
+    /**
+     * Default action
+     */
+    public function defaultAction()
+    {
+        return array();
+    }
+}

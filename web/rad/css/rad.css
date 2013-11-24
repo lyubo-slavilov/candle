@@ -171,3 +171,9 @@ button.linklike {
 button.linklike:hover {
 	text-decoration: underline !important;
 }
+
+.rad-selectable .ui-selectee a {
+	display: inline-block;
+	width: 100%;
+	text-decoration: none;
+}

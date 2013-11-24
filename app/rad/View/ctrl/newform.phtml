@@ -1,0 +1,17 @@
+<div style="width: 400px;">
+    <form class="automatic" action="<?php echo $this->url('ctrl-create'); ?>">
+        <h3>General</h3>
+        <p>
+            <label>Controller Name<span class="ex">Example: User (this will produce UserController controller)</span><br/>
+                <input type="text"  name="ctrl[name]"/>
+            </label>
+            <label>
+                <input type="checkbox" name="ctrl[withaction]" checked="checked" value="1"/> With default action
+            </label> 
+        </p>
+        <input type="hidden" name="app" value="<?php echo $this->app; ?>" />
+        <div class="actions">
+            <button type="submit">Create</button>
+        </div>
+    </form>
+</div>

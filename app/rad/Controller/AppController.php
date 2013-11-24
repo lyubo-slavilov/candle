@@ -5,15 +5,9 @@ use Service\Utils;
 
 use Candle\Http\Request;
 
-use Candle\Controller\AbstractController;
+class AppController extends AbstractAjaxController {
 
-class AppController extends AbstractController {
 
-    public function beforeExecute()
-    {
-        $this->setLayout(false);
-    }
-    
     public function installedListComponent()
     {
         $glob = glob(CANDLE_APP_BASE_DIR . '/*', GLOB_ONLYDIR);
@@ -63,20 +57,14 @@ class AppController extends AbstractController {
         $description = Utils::getParam($post, 'desc', '');
         
         if (!$name) {
-            $this->getResponse()->setStatus(400, 'Invalid data');
-            $this->getResponse()->setContent('Invalid application name');
-            $this->getResponse()->send();
-            die();
+            $this->stop('Invalid application name', 'Invalid data', 400);
         }
         
         $utils = new \Service\Rad\AppUtils();
         try {
             $utils->createApplication($name, $fc, $withdev, $description);
         } catch (\Exception $e) {
-            $this->getResponse()->setStatus(400, 'Invalid data');
-            $this->getResponse()->setContent($e->getMessage());
-            $this->getResponse()->send();
-            die();
+            $this->stop($e->getMessage(), 'Invalid data', 400);
         }
         
         return;

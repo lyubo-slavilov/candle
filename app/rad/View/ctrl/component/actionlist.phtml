@@ -2,7 +2,14 @@
 <h3>Actions</h3>
 <ul class="rad-selectable" style="background: #505050;">
 <?php foreach($this->methods['actions'] as $action): ?>
-    <li><?php echo $action?></li>
+    <?php 
+        $url = $this->url('ctrl-default', array(
+            'app' => $this->app,
+            'ctrl' => $this->controller,
+            'action' => 'actionProps',
+        ));
+    ?>
+    <li><a class="ajax" data-target="props" data-source="<?php echo $url?>" data-data="<?php echo $action; ?>" href="#"><?php echo $action?></a></li>
 <?php endforeach; ?>
 </ul>
 <a style="float:right;" href="#">New</a><br/>
@@ -10,7 +17,7 @@
 <h3>Components</h3>
 <ul class="rad-selectable" style="background: #505050;">
 <?php foreach($this->methods['components'] as $component): ?>
-    <li><?php echo $component?></li>
+    <li><a class="ajax" href="#"><?php echo $component?></a></li>
 <?php endforeach; ?>
 </ul>
 <a style="float:right;" href="#">New</a>

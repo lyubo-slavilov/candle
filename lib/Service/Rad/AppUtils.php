@@ -2,7 +2,7 @@
 namespace Service\Rad;
 
 /**
- * Candle Rad service
+ * Candle Rad Application service
  * @author Lyubomir Slavilov <lyubo.slavilov@gmail.com>
  *
  */

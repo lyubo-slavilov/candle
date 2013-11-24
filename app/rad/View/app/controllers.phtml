@@ -10,12 +10,17 @@
     </div>
 <?php endforeach;?>
 </div>
-<a style="float:right;" href="#">New</a>
+<a class="create-controller" style="float:right;" href="#" title="Create Controller" data-action="dialog" data-source="<?php echo $this->url('ctrl-new')?>?app=<?php echo $this->app?>">New</a>
 <script>
 
+
+$('a.create-controller').on('dialogSuccess', function(){
+	$('.appcontent').load('<?php echo $this->url('app-default', array('app' => $this->app, 'action' => 'controllers')); ?>');
+});
 $('.app-controllers .rad-selectable').radselectable();
 $('.app-controllers').accordion({
-	collapsible: true
+	collapsible: true,
+	autoHeight: false
 });
 </script>
 

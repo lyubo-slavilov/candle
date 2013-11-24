@@ -1,0 +1,13 @@
+<?php if($this->file): ?>
+    <h3>Template <?php echo $this->file; ?></h3>
+    <pre style="width: 90%;
+        white-space: pre-wrap;
+        margin: 0 auto;
+        background: whitesmoke;
+        color: black;
+        padding: 10px;
+        font-size: 11px;" 
+    ><?php echo $this->content; ?></pre>
+<?php else: ?>
+    <p style="margin: 10px; padding: 10px;" class="ui-state-error">No template found</p>
+<?php endif; ?>
