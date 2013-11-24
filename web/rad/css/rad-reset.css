@@ -1,3 +1,9 @@
+.panel-home .ui-panel-handle-container,
+.panel-mainmenu .ui-panel-handle-container,
+.panel-statusbar .ui-panel-handle-container{
+	display: none;
+}
+
 /************************
 	jQuery UI 
 ************************/

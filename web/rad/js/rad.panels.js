@@ -7,14 +7,14 @@ rad.panels = {}
  */
 rad.panels.switcher = $('<select>').addClass('ui-panel-switch');
 //add or remove more types of panels
-$('<option>').val('MainMenu').addClass('ui-panel-type-mainmenu').text('Main Menu').appendTo(rad.panels.switcher);
-$('<option>').val('Home').addClass('ui-panel-type-home').text('Home').appendTo(rad.panels.switcher);
+//$('<option>').val('MainMenu').addClass('ui-panel-type-mainmenu').text('Main Menu').appendTo(rad.panels.switcher);
+//$('<option>').val('Home').addClass('ui-panel-type-home').text('Home').appendTo(rad.panels.switcher);
 $('<option>').val('Navigation').addClass('ui-panel-type-navigation').text('Navigation').appendTo(rad.panels.switcher);
 $('<option>').val('Workarea').addClass('ui-panel-type-workarea').text('Work Area').appendTo(rad.panels.switcher);
-$('<option>').val('Video').addClass('ui-panel-type-video').text('Video').appendTo(rad.panels.switcher);
-$('<option>').val('Gallery').addClass('ui-panel-type-gallery').text('Gallery').appendTo(rad.panels.switcher);
+//$('<option>').val('Video').addClass('ui-panel-type-video').text('Video').appendTo(rad.panels.switcher);
+//$('<option>').val('Gallery').addClass('ui-panel-type-gallery').text('Gallery').appendTo(rad.panels.switcher);
 $('<option>').val('Properties').addClass('ui-panel-type-properties').text('Properties').appendTo(rad.panels.switcher);
-$('<option>').val('StatusBar').addClass('ui-panel-type-statusbar').text('Status Bar').appendTo(rad.panels.switcher);
+//$('<option>').val('StatusBar').addClass('ui-panel-type-statusbar').text('Status Bar').appendTo(rad.panels.switcher);
 
 
 rad.panels._getPanelRemoteContent = function(panelName, data){

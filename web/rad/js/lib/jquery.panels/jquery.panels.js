@@ -195,19 +195,19 @@
 				if(state.dividers[i].fixed) r = 1;
 				else r = scaleY;
 				g = {
-					top: state.dividers[i].geometry.top*r,
-					left: state.dividers[i].geometry.left*scaleX,
-					height: state.dividers[i].geometry.height,
-					width: state.dividers[i].geometry.width*scaleX
+					top: Math.round(state.dividers[i].geometry.top*r),
+					left: Math.round(state.dividers[i].geometry.left*scaleX),
+					height: Math.round(state.dividers[i].geometry.height),
+					width: Math.round(state.dividers[i].geometry.width*scaleX)
 				}
 			}else{
 				if(state.dividers[i].fixed) r = 1;
 				else r = scaleX;
 				g = {
-					top: state.dividers[i].geometry.top*scaleY,
-					left: state.dividers[i].geometry.left*r,
-					height: state.dividers[i].geometry.height*scaleY,
-					width: state.dividers[i].geometry.width
+					top: Math.round(state.dividers[i].geometry.top*scaleY),
+					left: Math.round(state.dividers[i].geometry.left*r),
+					height: Math.round(state.dividers[i].geometry.height*scaleY),
+					width: Math.round(state.dividers[i].geometry.width)
 				}
 			}
 			d = this.createDivider(state.dividers[i].orientation, g);
@@ -716,7 +716,7 @@
 			axis: axis,
 			containment: 'parent',
 			cursor: cursor,
-			grid: [4,4]
+			
 		});
 	}
 	Panels.main.prototype._attachPanelToDivider = function(panel, toDivider, side){
@@ -766,7 +766,7 @@
 			attachedTo.each(function(){
 				onSameSide = $(this).prop('dividers.'+revSide);
 				if(onSameSide){
-					$(this).prop('dividers.'+revSide, onSameSide.not(divider))
+					$(this).prop('dividers.'+revSide, $(onSameSide).not(divider))
 				}
 			})
 		}
@@ -911,8 +911,8 @@
 				}else{
 					divider = targetPanel.prop('dividers.left');
 				}
-				p = divider.prop('panels.left').not(sourcePanel).not(targetPanel);
-				p1 = divider.prop('panels.right').not(sourcePanel).not(targetPanel);
+				p = $(divider.prop('panels.left')).not(sourcePanel).not(targetPanel);
+				p1 = $(divider.prop('panels.right')).not(sourcePanel).not(targetPanel);
 				if(!divider.prop('dividers.top').is(targetPanel.prop('dividers.top'))){
 					_d = $this.createDivider('v',{
 						top: divider.position().top,
@@ -951,7 +951,7 @@
 					}
 				});
 				$(p).each(function(i,el){
-					p.prop('dividers.right', $(p.prop('dividers.right').not(divider)));
+					p.prop('dividers.right', $(p.prop('dividers.right')).not(divider));
 					if($(el).position().top < targetPanel.position().top){
 						if(_d) $this._attachPanelToDivider($(el), _d, 'left')
 					}else{
@@ -959,7 +959,7 @@
 					}
 				});
 				$(p1).each(function(i,el){
-					p.prop('dividers.left', $(p.prop('dividers.left').not(divider)));
+					p.prop('dividers.left', $(p.prop('dividers.left')).not(divider));
 					if($(el).position().top < targetPanel.position().top){
 						if(_d) $this._attachPanelToDivider($(el), _d, 'right');
 					}else{
@@ -974,8 +974,8 @@
 				}else{
 					divider = targetPanel.prop('dividers.bottom');
 				}
-				p = divider.prop('panels.bottom').not(sourcePanel).not(targetPanel);
-				p1 = divider.prop('panels.top').not(sourcePanel).not(targetPanel);
+				p = $(divider.prop('panels.bottom')).not(sourcePanel).not(targetPanel);
+				p1 = $(divider.prop('panels.top')).not(sourcePanel).not(targetPanel);
 				if(!divider.prop('dividers.right').is(targetPanel.prop('dividers.right'))){
 					_d1 = $this.createDivider('h',{
 						top: divider.position().top,
@@ -1014,7 +1014,7 @@
 					}
 				});
 				$(p).each(function(i,el){
-					p.prop('dividers.top', $(p.prop('dividers.top').not(divider)));
+					p.prop('dividers.top', $(p.prop('dividers.top')).not(divider));
 					if($(el).position().left < targetPanel.position().left){
 						if(_d) $this._attachPanelToDivider($(el), _d, 'bottom')
 					}else{
@@ -1022,7 +1022,7 @@
 					}
 				});
 				$(p1).each(function(i,el){
-					p.prop('dividers.bottom', $(p.prop('dividers.top').not(divider)));
+					p.prop('dividers.bottom', $(p.prop('dividers.top')).not(divider));
 					if($(el).position().left < targetPanel.position().left){
 						if(_d) $this._attachPanelToDivider($(el), _d, 'top');
 					}else{

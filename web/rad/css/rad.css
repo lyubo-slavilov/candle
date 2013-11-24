@@ -5,6 +5,10 @@ html,body {
 	font-family: Arial, Helvetica, Verdana, sans-serif;
 }
 
+*:focus {
+    outline: none;
+   }
+   
 .ui-panel-content {
 	position: absolute;
 	height: auto;
@@ -114,7 +118,36 @@ a.dark {
     margin-top: -40px;
 }
 
+form label,
+form h1,
+form h2,
+form h3{
+	text-shadow: 0 -1px black;
+}
 
+form label .ex {
+	font-size: .7em;
+	font-style: italic;
+	float: right;
+	color: #9c9c9c;
+	text-shadow: 0 1px rgba(0,0,0,0.6);
+}
+input, textarea, select {
+	background: #434343;
+	border: 1px solid rgb(41, 41, 41);
+	padding: 5px;
+	box-shadow: 0 1px 0 rgba(255,255,255,0.2), 0 0px 5px rgba(0,0,0,0.5) inset;
+	border-radius: 2px;
+	color: #e6a800;
+	width: 100%;
+}
+input:focus, textarea:focus {
+	background: #505050;
+}
+
+input[type=checkbox], input[type=radio] {
+	width: auto;
+}
 
 button.linklike {
 	background: none !important;
@@ -124,3 +157,5 @@ button.linklike {
 button.linklike:hover{
 	text-decoration: underline !important;
 }
+
+
