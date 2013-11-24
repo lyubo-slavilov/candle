@@ -1,7 +1,7 @@
-
-<h1><?php echo ucfirst($this->request->get('data')); ?> application</h1>
-<p>details</p>
-<div class="appcontent">content</div>
+<h3 class="panel-title" ><?php echo ucfirst($this->request->get('data')); ?> Application</h3>
+<div class="appcontent centeredBlock">
+    <p>details</p>
+</div>
 
 <script>
 rad.panels.switchPanelTo($('.panel-navigation'), 'appnavigation',  '<?php echo $this->request->get('data')?>');

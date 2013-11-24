@@ -41,7 +41,8 @@ class AppController extends AbstractController {
         }
     
         return array(
-                'controllers' => $clist
+            'app' => $app,
+            'controllers' => $clist
         );
     }
     

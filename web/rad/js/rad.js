@@ -65,6 +65,17 @@ $(function(){
 					
 					
 (function( $ ){
+	//plugin radselectable
+	$.fn.radselectable = function() {
+		$(this).addClass('ui-selectable rad-selectable').find('li').addClass('ui-selectee').click(function(){
+			$(this).closest('.ui-panel').find('.ui-selectee').removeClass('ui-selected');
+			$(this).addClass('ui-selected');
+			
+		}).find('a').click(function(){
+			$(this).closest('li.ui-selectee').trigger('click');
+		});
+	}
+	
 	//plugin buttonset vertical
 	$.fn.buttonsetv = function() {
 	  $(':radio, :checkbox', this).wrap('<div style="margin: 1px"/>');

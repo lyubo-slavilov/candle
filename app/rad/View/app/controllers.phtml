@@ -1,7 +1,21 @@
-<h2>Controllers</h2>
-<ul>
+<h3>Controllers</h3>
+<div class="app-controllers">
 <?php foreach ($this->controllers as $controller): ?>
-    <li><a href="#" class="ajax dark" panel="appdetails" rel="<?php echo $controller?>"><?php echo ucfirst($controller)?></a></li>
+    <p><?php echo ucfirst($controller)?>Controller</p>
+    <div>
+        <?php echo $this->renderComponent('ctrl', 'actionList', array(
+            'app' => $this->app,
+            'controller' => $controller
+        ));?>
+    </div>
 <?php endforeach;?>
-</ul>
+</div>
+<a style="float:right;" href="#">New</a>
+<script>
+
+$('.app-controllers .rad-selectable').radselectable();
+$('.app-controllers').accordion({
+	collapsible: true
+});
+</script>
 

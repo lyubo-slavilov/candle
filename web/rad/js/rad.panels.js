@@ -95,6 +95,7 @@ rad.panels._initPanel = function(panel, doNotChangeTitle){
 			
 			rad.panels._initAjaxLinks(panel);
 			rad.panels.initDialogs(panel);
+			panel.find('.rad-selectable').radselectable();
 			
 		}).error(function(){
 			$('<p>')
@@ -174,6 +175,7 @@ rad.panels._initAjaxLinks = function(panel){
 					
 					rad.panels._initAjaxLinks(targetPanel);
 					rad.panels.initDialogs(targetPanel);
+					panel.find('.rad-selectable').radselectable();
 				}
 			)
 		}

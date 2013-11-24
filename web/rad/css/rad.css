@@ -6,9 +6,9 @@ html,body {
 }
 
 *:focus {
-    outline: none;
-   }
-   
+	outline: none;
+}
+
 .ui-panel-content {
 	position: absolute;
 	height: auto;
@@ -17,12 +17,26 @@ html,body {
 	width: 100%;
 }
 
-.panel-body.white {
+.panel-body h1,.panel-body h2,.panel-body h3,.panel-body h4 {
+	text-shadow: 0 -1px black;
+}
+
+.panel-body .panel-title {
+	color: #e6a800;
+	margin: 0;
+	padding: 5px;
+	text-align: center;
+	background: rgb(102, 102, 102);
+	border: 0;
+	font-weight: normal;
+}
+
+.centeredBlock {
 	width: 80%;
-	margin: 30px auto;
-	background: #E4E4E4;
-	box-shadow: 0 0 20px rgba(0, 0, 0, 0.8);
-	color: #1A1A1A;
+	margin: 0px auto;
+	ffbackground: #E4E4E4;
+	fffbox-shadow: 0 0 20px rgba(0, 0, 0, 0.8);
+	fffcolor: #1A1A1A;
 	padding: 10px;
 	position: relative;
 }
@@ -115,13 +129,10 @@ a.dark {
 
 .ui-dialog form.automatic .actions {
 	visibility: hidden;
-    margin-top: -40px;
+	margin-top: -40px;
 }
 
-form label,
-form h1,
-form h2,
-form h3{
+form label,form h1,form h2,form h3 {
 	text-shadow: 0 -1px black;
 }
 
@@ -130,32 +141,33 @@ form label .ex {
 	font-style: italic;
 	float: right;
 	color: #9c9c9c;
-	text-shadow: 0 1px rgba(0,0,0,0.6);
+	text-shadow: 0 1px rgba(0, 0, 0, 0.6);
 }
-input, textarea, select {
+
+input,textarea,select {
 	background: #434343;
 	border: 1px solid rgb(41, 41, 41);
 	padding: 5px;
-	box-shadow: 0 1px 0 rgba(255,255,255,0.2), 0 0px 5px rgba(0,0,0,0.5) inset;
+	box-shadow: 0 1px 0 rgba(255, 255, 255, 0.2), 0 0px 5px
+		rgba(0, 0, 0, 0.5) inset;
 	border-radius: 2px;
 	color: #e6a800;
 	width: 100%;
 }
-input:focus, textarea:focus {
+
+input:focus,textarea:focus {
 	background: #505050;
 }
 
-input[type=checkbox], input[type=radio] {
+input[type=checkbox],input[type=radio] {
 	width: auto;
 }
 
 button.linklike {
 	background: none !important;
 	border: none !important;
-	
 }
-button.linklike:hover{
+
+button.linklike:hover {
 	text-decoration: underline !important;
 }
-
-
