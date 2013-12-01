@@ -1,10 +1,10 @@
 <div class="panel-body">
-    <h3 class="panel-title"><?php echo $this->method['name']; ?>()</h3>
+    <h3 class="panel-title">{{method.name}}()</h3>
     <br/>
-    <pre class="prettyprint lang-php rad-code" style="width: 90%;"><?php echo $this->method['source']?></pre>
+    <pre class="prettyprint lang-php rad-code" style="width: 90%;">{{method.source}}</pre>
     <?php if($this->tpl): ?>
         <br /><br/>
-        <h3 class="panel-title">Template <?php echo $this->tpl['fileName']; ?></h3>
+        <h3 class="panel-title">Template {{tpl.fileName}}</h3>
         <br/>
         <pre class="prettyprint lang-html rad-code" style="width: 90%;"><?php echo htmlspecialchars($this->tpl['source']); ?></pre>
     <?php else: ?>

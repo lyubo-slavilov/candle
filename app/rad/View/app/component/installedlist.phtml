@@ -1,9 +1,9 @@
 <ul class="app-list" style="padding: 0">
     <?php foreach ($this->apps as $app): ?>
-        <li class="app"><a href="#" class="ajax" data-target="panel-workarea .panel-body" data-source="widget/appdetails" data-data="<?php echo $app?>"><?php echo ucfirst($app)?></a></li>
+        <li class="app"><a href="#" class="ajax" data-target="panel-workarea .panel-body" data-source="widget/appdetails" data-data="<?php echo $app; ?>"><?php echo ucfirst($app)?></a></li>
     <?php endforeach;?>
 </ul>
-<a class="create-new-app" href="#" title="Create Application"  data-action="dialog" data-source="<?php echo $this->url('app-new'); ?>">Create New Application</a>
+<a class="create-new-app" href="#" title="Create Application"  data-action="dialog" data-source="{{url('app-new')}}">Create New Application</a>
 <script>
 $('ul.app-list .app').button().find('a').css({
 	lineHeight: '80px',

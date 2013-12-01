@@ -22,7 +22,7 @@ class Parser {
         $content = file_get_contents($file);
         
         //variables
-        $pattern = "/\{\{\s*([\sa-z0-9_\-\(\)\.\,\'\":\[\]]+)\s*\}\}/i";
+        $pattern = "/\{\{\s*([\sa-z0-9_\-\(\)\.\,\'\":\[\]\$]+)\s*\}\}/i";
         
         $content = preg_replace_callback($pattern, function($matches){
             $match = $matches[1];
@@ -30,6 +30,8 @@ class Parser {
             $match = str_replace('[', 'array(', $match);
             $match = str_replace(']', ')', $match);
             $match = str_replace(':', '=>', $match);
+            
+            $match = preg_replace('/\$([a-z0-9_]+)/i', '$this->$1', $match);
             
             $parts = explode('.', $match);
             $result = array_shift($parts);
