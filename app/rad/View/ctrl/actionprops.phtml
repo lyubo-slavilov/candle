@@ -1,13 +1,16 @@
-<?php if($this->file): ?>
-    <h3>Template <?php echo $this->file; ?></h3>
-    <pre style="width: 90%;
-        white-space: pre-wrap;
-        margin: 0 auto;
-        background: whitesmoke;
-        color: black;
-        padding: 10px;
-        font-size: 11px;" 
-    ><?php echo $this->content; ?></pre>
-<?php else: ?>
-    <p style="margin: 10px; padding: 10px;" class="ui-state-error">No template found</p>
-<?php endif; ?>
+<div class="panel-body">
+    <h3 class="panel-title"><?php echo $this->method['name']; ?>()</h3>
+    <br/>
+    <pre class="prettyprint lang-php rad-code" style="width: 90%;"><?php echo $this->method['source']?></pre>
+    <?php if($this->tpl): ?>
+        <br /><br/>
+        <h3 class="panel-title">Template <?php echo $this->tpl['fileName']; ?></h3>
+        <br/>
+        <pre class="prettyprint lang-html rad-code" style="width: 90%;"><?php echo htmlspecialchars($this->tpl['source']); ?></pre>
+    <?php else: ?>
+        <p style="margin: 10px; padding: 10px;" class="ui-state-error">No template found</p>
+    <?php endif; ?>
+</div>
+<script>
+prettyPrint();
+</script>

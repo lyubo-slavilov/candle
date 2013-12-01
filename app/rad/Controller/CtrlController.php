@@ -83,17 +83,9 @@ class CtrlController extends AbstractAjaxController {
         $controller = $this->getRequest()->get('ctrl', false);
         $method = $this->getRequest()->get('data', false);
         
-        $viewFile = CANDLE_APP_BASE_DIR . '/' . strtolower($app) . '/View/' . strtolower($controller) . '/' . strtolower($method) .'.phtml';
-        if (file_exists($viewFile)) {
-            return array(
-                'file' => strtolower($method) .'.phtml',
-                'content' => file_get_contents($viewFile)
-            );
-        } else {
-            return array(
-                'file' => false,
-                'content' => ''
-            );
-        }
+        $utils = new \Service\Rad\CtrlUtils();        
+        $data = $utils->getMethodInfo($app, $controller, $method);
+        return $data;
+        
     }
 }

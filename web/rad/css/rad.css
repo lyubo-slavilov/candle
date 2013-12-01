@@ -165,7 +165,7 @@ input[type=checkbox],input[type=radio] {
 
 button.linklike {
 	background: none !important;
-	border: none !important;
+	border: none !important;`
 }
 
 button.linklike:hover {
@@ -176,4 +176,15 @@ button.linklike:hover {
 	display: inline-block;
 	width: 100%;
 	text-decoration: none;
+}
+
+.rad-code {
+	white-space: pre-wrap;
+	margin: 0 auto;
+	background: whitesmoke;
+	border: 1pc solid black;
+	box-shadow: 0 0 20px;
+	color: black;
+	padding: 10px;
+	font-size: 11px;
 }

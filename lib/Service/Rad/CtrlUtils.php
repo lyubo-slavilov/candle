@@ -42,4 +42,56 @@ class CtrlUtils extends AbstractUtils {
             ));
         }
     }
+
+    public function getMethodInfo($app, $controller, $method, $isComponent = false) {
+        
+        if ($isComponent) {
+            $compDir = 'component/';
+            $methodFullName = $method . 'Component';
+        } else {
+            $compDir = '';
+            $methodFullName = $method . 'Action';
+        }
+        
+        $viewFile = CANDLE_APP_BASE_DIR . '/' 
+                    . strtolower($app) 
+                    . '/View/' . $compDir
+                    . strtolower($controller) . '/' 
+                    . strtolower($method) .'.phtml';
+        
+        
+        $result = array();
+        
+        if (file_exists($viewFile)) {
+            $result['tpl'] = array(
+                'fileName' => strtolower($method) . '.phtml',
+                'filePath' => $viewFile,
+                'source' => file_get_contents($viewFile)
+            );
+        }
+        
+        $className = '\\' . ucfirst($app) . '\\Controller\\' . ucfirst($controller) . 'Controller';
+        
+        $reflectedClass = new \ReflectionClass($className);
+        $reflectedMethod = $reflectedClass->getMethod($methodFullName); 
+        
+        $fileName = $reflectedMethod->getFileName();
+        
+        $file = new \SplFileObject($fileName);
+        $fileIterator = new \LimitIterator($file, $reflectedMethod->getStartLine() - 1, $reflectedMethod->getEndLine() - $reflectedMethod->getStartLine() + 1);
+        $source = '';
+        foreach($fileIterator as $line) {
+            $source .= $line;
+        }
+        
+        $result['method'] = array(
+            'name' => $methodFullName,
+            'fileName' => basename($fileName),
+            'filePath' => $fileName,
+            'source' => $source
+        );
+        
+        return $result;
+        
+    }
 }

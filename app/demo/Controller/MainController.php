@@ -10,6 +10,7 @@ class MainController extends AbstractController {
      
     public function defaultAction()
     {
+        
         return array();
     }
 
