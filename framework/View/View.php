@@ -40,6 +40,36 @@ class View {
         }
     }
     
+    /**
+     * Gets or creates template parsed image
+     * @param string $file
+     * @return string The path to the cached file
+     */
+    private function getCachedImage($file)
+    {
+        $image = str_replace(CANDLE_APP_BASE_DIR, CANDLE_INSTALL_DIR . '/cache', $file);
+        
+        if (file_exists($image)) {
+            $fileTime = filemtime($file);
+            $imageTime = filemtime($image);
+            if ($imageTime > $fileTime) {
+                return $image;
+            } 
+        }
+        
+        $dir = dirname($image);
+        if (!file_exists($dir)) {
+            mkdir($dir, 0777, true);
+        }
+        
+        $parser = new Parser();
+        $parsedContent = $parser->parse($file);
+        
+        file_put_contents($image, $parsedContent);
+        
+        return $image;
+    }
+    
     public function __construct(array $params)
     {
         
@@ -59,8 +89,8 @@ class View {
     private function renderLayout($layoutFile)
     {
         ob_start();
-        
-        require $layoutFile;
+        $template = $this->getCachedImage($layoutFile);
+        require $template;
         
         $result = ob_get_clean();
         
@@ -125,7 +155,7 @@ class View {
             return "<span style=\"color: red\">Template {$template} does not exists</span>";
         }
         
-        $this->template = $template;
+        $this->template =  $this->getCachedImage($template);
         
         ob_start();
         
