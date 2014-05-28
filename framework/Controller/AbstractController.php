@@ -163,8 +163,8 @@ abstract class AbstractController {
             if ($this->controllerName != '') {
                 $c = $this->controllerName;
             } else {
-                
-                $class = array_pop(explode('\\', get_class($this)));
+                $classList = explode('\\', get_class($this));
+                $class = array_pop($classList);
                 $c = str_replace('controller', '', strtolower($class));
             }
             $t = $this->templateName;
