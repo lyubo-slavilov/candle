@@ -127,7 +127,7 @@ class Response {
     public function send()
     {
         
-        header("HTTP/1.1 {$this->status['code']}: $this->status['message']", true, $this->status['code']);
+        header("HTTP/1.1 {$this->status['code']}: {$this->status['message']}", true, $this->status['code']);
         foreach ($this->headers as $header) {
             header(header);
         }
