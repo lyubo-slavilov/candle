@@ -66,10 +66,7 @@ class Router {
         $baseRoute = Config::get('app.base_route', '');
         $pattern = $baseRoute . $pattern;
         $lastChar = substr($pattern, -1);
-        if ($lastChar != '/') {
-            $pattern .= '/';
-        }
-
+        
         $rule->name = $name;
         $rule->pattern = $pattern;
         $rule->controller = isset($options['controller']) ? $options['controller'] : null;
@@ -112,10 +109,6 @@ class Router {
      */
     private function match($pattern, $route)
     {
-        $lastChar = substr($route, -1);
-        if ($lastChar != '/') {
-            $route .= '/';
-        }
         $result =  preg_match("@^{$pattern}$@", urldecode($route), $matches);
 
         if ($result) {

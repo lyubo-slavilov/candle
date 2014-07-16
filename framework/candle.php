@@ -19,7 +19,7 @@ if (CANDLE_ENVIRONMENT == 'prod') {
     error_reporting(0);
     ini_set('display_errors', 0);
 } else if (CANDLE_ENVIRONMENT == 'dev') {
-    error_reporting(E_ALL & ~E_NOTICE);
+    error_reporting(E_ALL);
     ini_set('display_errors', 1);
 }
 
@@ -64,7 +64,7 @@ if (CANDLE_ENVIRONMENT == 'dev') {
 
         throw new BootstrapException("{$errno}: {$errstr} at {$errfile} {$errline}");
 
-    }, E_ALL & ~E_NOTICE);
+    }, E_ALL);
 }
 
 //Try to run the framework
