@@ -39,7 +39,7 @@ class Generator {
      * @throws UrlGeneratorException If a parameter is missing
      * @return string
      */
-    public function generateUrl($ruleName, array $params = array(), $absolute = false)
+    public function generateUrl($ruleName, array $params = array(), $absolute = false, $asTemplate = false)
     {
         $rule = Router::getInstance()->getRouteByName($ruleName);
 
@@ -52,11 +52,15 @@ class Generator {
 
         $url = $urlPattern;
 
-        $url = preg_replace_callback('@:([a-zA-Z0-9\_\-]*)@', function($matches) use ($params){
-            if (isset($params[$matches[1]])) {
-                return $params[$matches[1]];
+        $url = preg_replace_callback('@:([a-zA-Z0-9\_\-]*)@', function($matches) use ($params, $asTemplate){
+            if ($asTemplate) {
+                return '{' . $matches[1] . '}';
             } else {
-                throw new UrlGeneratorException("Missing parameter: {$matches[1]}");
+                if (isset($params[$matches[1]])) {
+                    return $params[$matches[1]];
+                } else {
+                    throw new UrlGeneratorException("Missing parameter: {$matches[1]}");
+                }
             }
 
         }, $url);

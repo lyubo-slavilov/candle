@@ -14,16 +14,16 @@ use Flame\Exception\QueryException;
  *
  */
 class Query {
-    
+
     const MODE_NONE = 0;
     const MODE_SELECT = 1;
     const MODE_UPDATE = 2;
     const MODE_INSERT = 3;
     const MODE_DELETE = 4;
-    
+
     private $adapter;
 
-    
+
     private $select  = '';
     private $update  = '';
     private $insert  = '';
@@ -35,23 +35,23 @@ class Query {
     private $onduplicate = null;
     private $order = array();
     private $limit = '';
-    
+
     private $parameters = array();
-    
+
     private $mode = self::MODE_NONE;
-    
+
     private $prepared = false;
     private $sql = '';
-    
+
     /**
-     * 
+     *
      * @var \PDOStatement
      */
     private $statement;
-    
+
     private $fetchAsClass = false;
-    
-    
+
+
     /**
      * Gests the current mode name
      * @param unknown_type $mode
@@ -60,13 +60,13 @@ class Query {
     private function getModeName($mode)
     {
         $reflection = new \ReflectionClass($this);
-        
+
         $constants = array_flip($reflection->getConstants());
-        
+
         return $constants[$mode];
-        
+
     }
-    
+
     /**
      * Sets the current mode name
      * @param unknown_type $mode
@@ -74,7 +74,7 @@ class Query {
      */
     private function setMode($mode)
     {
-        
+
         $allowed = array(
                 self::MODE_NONE,
                 self::MODE_SELECT,
@@ -82,22 +82,22 @@ class Query {
                 self::MODE_INSERT,
                 self::MODE_DELETE,
         );
-        
-        
+
+
         if (! in_array($mode, $allowed)) {
             throw new QueryException("Invalid query mode {$mode}");
         }
-        
+
         if ($this->mode != self::MODE_NONE) {
             $newName = $this->getModeName($mode);
             $currentName = $this->getModeName($this->mode);
             throw new QueryException("Can not change query mode to {$newName}. Query already in mode {$currentName}");
         }
-        
+
         $this->mode = $mode;
-        
+
     }
-    
+
     /**
      * Prepares the SQL from the current object's state
      * @throws QueryException
@@ -107,8 +107,8 @@ class Query {
         if ($this->prepared) {
             throw new QueryException("Query already prepared");
         }
-        
-        $sql = '';     
+
+        $sql = '';
         switch ($this->mode) {
             case self::MODE_SELECT:
                 $this->sql = $this->prepareSelect();
@@ -128,7 +128,7 @@ class Query {
         $this->prepared = true;
 
     }
-    
+
     /**
      * Prepares a SELECT sql statement
      * @return string
@@ -138,25 +138,25 @@ class Query {
         $sql = 'SELECT ' . $this->select;
         $sql .= $this->from != '' ? ' FROM ' . $this->from : '';
         $sql .= $this->where != '' ? ' WHERE ' . $this->where : '';
-        
+
         $sql .= $this->prepareIn();
-        
+
         $order = '';
         foreach($this->order as $o) {
             $order .= "{$o['column']} {$o['direction']},";
         }
-        
+
         $order = substr($order, 0, -1);
-        
-        $sql .=  $order != '' ? ' ORDER BY ' . $order : ''; 
-        
-        $sql .=  $this->limit != '' ? ' LIMIT ' . $this->limit : ''; 
-        
+
+        $sql .=  $order != '' ? ' ORDER BY ' . $order : '';
+
+        $sql .=  $this->limit != '' ? ' LIMIT ' . $this->limit : '';
+
         return $sql;
-        
+
     }
-    
-    
+
+
     /**
      * Prepares the IN clause statement
      * @return string
@@ -166,11 +166,11 @@ class Query {
         if (is_null($this->in)) {
             return '';
         }
-        
+
         if (count($this->in['values']) == 0) {
             return '';
         }
-        
+
         if ($this->in['useNames']) {
             $keys = array_keys($this->in['values']);
             $prefix = 'in_' . str_replace('.', '', $this->in['what']);
@@ -178,14 +178,14 @@ class Query {
         } else {
             $seq = str_repeat('?, ', count($this->in['values']) - 1) . '?';
         }
-        
+
         if ($this->where != '') {
             return ' AND ' . $this->in['what'] . " IN ({$seq})";
         } else {
             return ' WHERE ' . $this->in['what'] . " IN ({$seq})";
         }
     }
-    
+
     /**
      * Prepares the UPDATE sql statement
      * @return string
@@ -193,25 +193,25 @@ class Query {
     private function prepareUpdate()
     {
        $sql = 'UPDATE ' . $this->update;
-        
+
         $set = '';
         foreach ($this->set as $key => $value) {
-            
+
             $set .= "{$key} = :set_{$key}, ";
         }
-        
+
         $set = substr($set, 0, -2);
-        
+
         $sql .= " SET {$set}";
         $sql .= $this->where != '' ? ' WHERE ' . $this->where : '';
         $sql .= $this->prepareIn();
-        
-        
-        
+
+
+
         return $sql;
-        
+
     }
-    
+
     /**
      * Prepares the INSERT sql statement
      * @return string
@@ -219,20 +219,20 @@ class Query {
     private function prepareInsert()
     {
         $sql = 'INSERT INTO ' . $this->insert;
-        
+
         $columns = '';
         $values = '';
         foreach ($this->values as $key => $value) {
-        
+
             $columns .= "{$key}, ";
             $values .= ":val_{$key}, ";
         }
-        
+
         $columns = substr($columns, 0, -2);
         $values = substr($values, 0, -2);
-        
+
         $sql .= " ({$columns}) VALUES ({$values})";
-        
+
         if ($this->onduplicate) {
             $set = '';
             foreach($this->onduplicate as $key => $value) {
@@ -242,17 +242,17 @@ class Query {
                     unset($this->onduplicate[$key]);
                 } else {
                     $set = "{$key} = :dpk_{$key}, ";
-                    
+
                 }
             }
             $set = substr($set, 0, -2);
             $sql .= " ON DUPLICATE KEY UPDATE {$set}";
         }
-        
+
         return $sql;
     }
-    
-    
+
+
     /**
      * Prepares the DELETE sql statement
      * @return string
@@ -263,19 +263,19 @@ class Query {
         $sql = 'DELETE FROM ' . $this->from;
 
         $sql .= $this->where != '' ? ' WHERE ' . $this->where : '';
-        
+
         $sql .= $this->prepareIn();
-        
+
         return $sql;
-    } 
-    
+    }
+
     public function __construct(Adapter $adapter)
     {
         $this->adapter = $adapter;
         return $this;
     }
-    
-    
+
+
     /**
      * Store information about the class we want to fetch
      * @param string $className
@@ -286,18 +286,18 @@ class Query {
         $this->fetchAsClass = $className;
         return $this;
     }
-    
+
     /**
      * Gets the affected query rows
      * @return int
      */
     public function getAffectedRows()
     {
-        
+
         return $this->statement ? $this->statement->rowCount() : null;
     }
-    
-    
+
+
     /**
      * Executes a query
      * @throws QueryException
@@ -313,31 +313,31 @@ class Query {
         if (! $this->prepared) {
             $this->prepareSql();
         }
-        
+
         $this->statement = $this->adapter->getPdo()->prepare($this->sql);
-        
-        
+
+
        // print $this->sql . "\n";
-        
-        
+
+
         foreach ($this->parameters as $key => $value) {
             $this->statement->bindValue($key, $value);
         }
-        
+
         if (!is_null($this->in)) {
             $prefix = 'in_' . str_replace('.', '', $this->in['what']);
-            
+
             foreach ($this->in['values'] as $key => $value) {
                 $this->statement->bindValue($prefix . $key, $value);
             }
         }
-        
+
         if ($this->mode == self::MODE_UPDATE) {
             foreach ($this->set as $key => $value) {
                 $this->statement->bindValue('set_' . $key, $value);
             }
         }
-        
+
         if ($this->mode == self::MODE_INSERT) {
             foreach ($this->values as $key => $value) {
                 $this->statement->bindValue('val_' . $key, $value);
@@ -348,19 +348,19 @@ class Query {
                 }
             }
         }
-        
-        
+
+
         if ($this->fetchAsClass) {
             $this->statement->setFetchMode(\PDO::FETCH_CLASS, $this->fetchAsClass);
         }
-        
+
         $this->adapter->exec($this->statement);
-        
-        
+
+
         return $this;
-        
+
     }
-    
+
     /**
      * Fetches from the resultset.
      * Closes the cursor if this is beyound the last fetch
@@ -369,14 +369,14 @@ class Query {
     public function fetch()
     {
         $result =  $this->statement->fetch();
-        
+
         if (!$result) {
             $this->statement->closeCursor();
         }
-        
+
         return $result;
     }
-    
+
     /**
      * Fetches one from the resultset and closes the cursor
      * @return Ambigous <NULL, mixed>
@@ -384,15 +384,15 @@ class Query {
     public function fetchOne()
     {
         $result = null;
-        
+
         if ($this->statement->rowCount() > 0) {
             $result = $this->statement->fetch();
             $this->statement->closeCursor();
         }
-        
+
         return $result;
     }
-    
+
     /**
      * Fetches one from the resultset and closes the cursor
      * @throws EmptyResultException
@@ -406,13 +406,13 @@ class Query {
         } else if ($this->statement->rowCount() > 1) {
             throw new NotASingleResultException('Not a single result');
         }
-        
-        
+
+
         $result = $this->statement->fetch();
         $this->statement->closeCursor();
         return $result;
     }
-    
+
     /**
      * Fetches everithing
      * @return multitype:
@@ -423,7 +423,7 @@ class Query {
         $this->statement->closeCursor();
         return $result;
     }
-    
+
     /**
      * Stores select info
      * @param string $expression SELECT expression
@@ -434,7 +434,7 @@ class Query {
         $this->select = $expression;
         return $this;
     }
-    
+
     /**
      * Stores UPDATE info
      * @param string $expression The UPDATE expression
@@ -445,7 +445,7 @@ class Query {
         $this->update = $expression;
         return $this;
     }
-    
+
     /**
      * Stores the INSERT info
      * @param string $expression The UPDATE expression
@@ -457,7 +457,7 @@ class Query {
         $this->insert = $expression;
         return $this;
     }
-    
+
     /**
      * Stores values info for VALUES expression
      * @param array $values
@@ -473,7 +473,7 @@ class Query {
         $this->values = $values;
         return $this;
     }
-    
+
     /**
      * Stores On DUPLICATE KEY info
      * @param array $values Values o be setted. Supports callables
@@ -487,7 +487,7 @@ class Query {
         }
         $this->onduplicate = $values;
     }
-    
+
     /**
      * Stores delete info for DELETE expression
      * @param string $from The DELETE FROM expression
@@ -498,7 +498,7 @@ class Query {
         $this->from = $from;
         return $this;
     }
-    
+
     /**
      * Stores the FROM info
      * @param string $expression the FROM clause info
@@ -508,7 +508,7 @@ class Query {
         $this->from = $expression;
         return $this;
     }
-    
+
     /**
      * Stores the set information for the SET clause
      * @param array $values Array of <key> => <value> pairs
@@ -519,7 +519,7 @@ class Query {
         $this->set = $values;
         return $this;
     }
-    
+
     /**
      * Stores a WHERE info
      * @param string $expression the WHERE epxpression
@@ -529,7 +529,7 @@ class Query {
         $this->where = $expression;
         return $this;
     }
-    
+
     /**
      * Adds an AND sub expression
      * @param string $expression
@@ -543,7 +543,7 @@ class Query {
         $this->where .= ' AND ' . $expression;
         return $this;
     }
-    
+
     /**
      * Adds an OR sub expression
      * @param string $expression
@@ -557,7 +557,7 @@ class Query {
         $this->where .= ' OR ' . $expression;
         return $this;
     }
-    
+
     /**
      * Stores an IN info
      * @param string $what Column identifier
@@ -568,11 +568,11 @@ class Query {
      */
     public function in($what, array $values, $useNames = true)
     {
-        
+
         if (count($values) == 0) {
             throw new QueryException('Cant use IN clause with empty array of values');
         }
-        
+
         $this->in = array(
                 'what' => $what,
                 'values' => $values,
@@ -580,13 +580,13 @@ class Query {
         );
         return $this;
     }
-    
+
     /**
      * Stores the ORDER info
      * @param string $column column name
      * @param string $direction ASC or DESC
      * @return \Flame\ORM\Query The current instance for chaining
-     */    
+     */
     public function order($column, $direction)
     {
         $this->order[] = array(
@@ -595,7 +595,7 @@ class Query {
         );
         return $this;
     }
-    
+
     /**
      * Stores LIMIT info
      * @param integer $count Limit count
@@ -607,11 +607,11 @@ class Query {
         $this->limit = "{$start}, {$count}";
         return $this;
     }
-    
+
     /**
      * Sets a parameter for later PDO bounding
      * @param string $name
-     * @param mixed $value 
+     * @param mixed $value
      * @return \Flame\ORM\Query The current instance for chaining
      */
     public function setParam($name, $value)
@@ -619,7 +619,7 @@ class Query {
         $this->parameters[$name] = $value;
         return $this;
     }
-    
+
     /**
      * Sets a bunch of parameteres for later PDO bounding
      * @param array $params Array of <name> => <value> pairs
@@ -628,9 +628,9 @@ class Query {
     public function setParams(array $params)
     {
         foreach($params as $key => $value) {
-            $this->setParam($key, $value);   
+            $this->setParam($key, $value);
         }
-        
+
         return $this;
     }
 }

@@ -124,9 +124,9 @@ class View {
      * @param boolen $absolute
      * @return string
      */
-    public function url($ruleName, array $params = array(), $absolute = false)
+    public function url($ruleName, array $params = array(), $absolute = false, $asTemplate = false)
     {
-        return Generator::getInstance()->generateUrl($ruleName, $params, $absolute);
+        return Generator::getInstance()->generateUrl($ruleName, $params, $absolute, $asTemplate);
     }
 
     /**

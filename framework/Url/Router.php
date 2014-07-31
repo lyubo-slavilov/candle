@@ -59,14 +59,16 @@ class Router {
      * @param string $name Name of the route/rule
      * @param array $options Route parsing parameters
      */
-    public function rule($pattern, $name, array $options = array())
+    public function rule($pattern, $name, array $options = array(), $exportable = false)
     {
         $rule = new \stdClass();
+
+        $rule->exportable = $exportable;
 
         $baseRoute = Config::get('app.base_route', '');
         $pattern = $baseRoute . $pattern;
         $lastChar = substr($pattern, -1);
-        
+
         $rule->name = $name;
         $rule->pattern = $pattern;
         $rule->controller = isset($options['controller']) ? $options['controller'] : null;
@@ -79,6 +81,21 @@ class Router {
 
         $this->rules[$name] = $rule;
     }
+
+
+    public function export()
+    {
+        $export = array();
+
+        foreach ($this->rules as $name => $rule) {
+            if ($rule->exportable) {
+                $export[$name] = $rule;
+            }
+        }
+
+        return $export;
+    }
+
 
     /**
      * Processes a pattern

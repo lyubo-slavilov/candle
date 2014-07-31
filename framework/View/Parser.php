@@ -10,32 +10,37 @@
 namespace Candle\View;
 
 class Parser {
-    
-    
+
+
     public function parse($file)
     {
-        
+
         if (!file_exists($file)) {
-            throw new Exception('Parser error: File does not exists ' . $file);
+            throw new \Exception('Parser error: File does not exists ' . $file);
         }
-        
+
         $content = file_get_contents($file);
-        
+
         //variables
         $pattern = "/\{\{\s*([\sa-z0-9_\-\(\)\.\,\'\":\[\]\$]+)\s*\}\}/i";
-        
+
         $content = preg_replace_callback($pattern, function($matches){
             $match = $matches[1];
-            
+
             $match = str_replace('[', 'array(', $match);
             $match = str_replace(']', ')', $match);
             $match = str_replace(':', '=>', $match);
-            
-            $match = preg_replace('/\$([a-z0-9_]+)/i', '$this->$1', $match);
-            
+
+
+            $match = preg_replace('/(\'[^\']*)(\.)([^\']*\')/i', '$1[[DOT]]$3', $match);
+
+            $match = preg_replace('/\$this.([a-z0-9_]+)/i', '$this->$1', $match);
+
+
+
             $parts = explode('.', $match);
             $result = array_shift($parts);
-            
+
             if (is_array($parts)){
                 foreach ($parts as $part) {
                      if (substr(trim($part), -1) == ')') {
@@ -45,10 +50,12 @@ class Parser {
                      }
                 }
             }
+
+            $result = str_replace('[[DOT]]', '.', $result);
             $result = '<?php echo $this->' . $result .'; ?>';
             return $result;
         }, $content);
-        
+
         return $content;
     }
 }
