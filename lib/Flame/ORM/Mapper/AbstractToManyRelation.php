@@ -57,8 +57,8 @@ abstract class AbstractToManyRelation extends AbstractCollection {
     
         if (is_object($entityOrId)) {
             $fqn = $this->getTargetEntityFqn();
-            if (! $entity instanceof $fqn) {
-                $class = get_class($entity);
+            if (! $entityOrId instanceof $fqn) {
+                $class = get_class($entityOrId);
                 throw new MapperException("Relation works whit entities of class {$fqn}. Instanse of {$class} passed instead.");
             }
     
