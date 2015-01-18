@@ -9,6 +9,8 @@
  */
 namespace Candle\View;
 
+use Service\Container;
+
 use Candle\Http\Response;
 
 use Candle\Url\Generator;
@@ -58,6 +60,7 @@ class View {
         }
 
         $dir = dirname($image);
+
         if (!file_exists($dir)) {
             mkdir($dir, 0777, true);
         }
@@ -103,13 +106,17 @@ class View {
      * @param array $params parameters to be passed to the View
      * @return string
      */
-    private function renderPartial($partialName, $params = array())
+    private function renderPartial($partialName, $params = array(), $skipIfMissing = false)
     {
         $parts = explode('.', $partialName);
         $template = CANDLE_APP_DIR . '/View/' . $parts[0] . '/partial/' . $parts[1] . '.phtml';
 
         if (! file_exists($template)) {
-            return "<span style=\"color: red\">Partial '{$partialName}' does not exists</span>";
+            if ($skipIfMissing) {
+                return '';
+            } else {
+                return "<span style=\"color: red\">Partial '{$partialName}' does not exists</span>";
+            }
         }
 
         $view = new View($params);
@@ -127,6 +134,16 @@ class View {
     public function url($ruleName, array $params = array(), $absolute = false, $asTemplate = false)
     {
         return Generator::getInstance()->generateUrl($ruleName, $params, $absolute, $asTemplate);
+    }
+
+
+    public function welder($welder) {
+        return $this->service('welder.' . $welder);
+    }
+
+    public function service($name, $newInstance = false)
+    {
+        return Container::get($name, $newInstance);
     }
 
     /**

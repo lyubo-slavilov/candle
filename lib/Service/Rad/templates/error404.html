@@ -1,19 +1,18 @@
 <h1>HTTP 404 - Page Not Found</h1>
 <p>The requested page is not found on this server</p>
-
-<?php
+<?php 
 use Candle\Http\Request;
 
 if (CANDLE_ENVIRONMENT == 'dev'):?>
     <div style="background: silver;">
         <h2>Uncought exception "<?php echo $this->exception->getMessage(); ?>"</h2>
-        <pre style="font-size: 11px;"><?php
+        <pre style="font-size: 11px;"><?php 
             $trace =  $this->exception->getTraceAsString();
             echo str_replace(CANDLE_INSTALL_DIR, '(install dir)', $trace);
         ?></pre>
         <h2>Request</h2>
-        <pre style="font-size: 11px;"><?php
-            print_r(Request::getInstance()); //ignore precommit
+        <pre style="font-size: 11px;"><?php 
+            print_r(Request::getInstance());
         ?></pre>
     </div>
 <?php endif; ?>

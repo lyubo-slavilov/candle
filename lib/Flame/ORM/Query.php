@@ -35,6 +35,7 @@ class Query {
     private $onduplicate = null;
     private $order = array();
     private $limit = '';
+    private $groupby = array();
 
     private $parameters = array();
 
@@ -51,6 +52,7 @@ class Query {
 
     private $fetchAsClass = false;
 
+    private $fetchStyle = array(\PDO::FETCH_ASSOC);
 
     /**
      * Gests the current mode name
@@ -98,6 +100,20 @@ class Query {
 
     }
 
+    public function debug()
+    {
+        $this->prepareSql();
+        $this->prepared = false;
+        $info = array(
+            'sql' => $this->sql,
+            'bind' => $this->parameters,
+            'values' => $this->values,
+            'onduplicate' => $this->onduplicate
+        );
+        print_r($info); //ignore precommit
+        $this->sql = '';
+    }
+
     /**
      * Prepares the SQL from the current object's state
      * @throws QueryException
@@ -141,6 +157,16 @@ class Query {
 
         $sql .= $this->prepareIn();
 
+        //GROUP BY clause
+        $groupBy = '';
+        foreach($this->groupby as $col) {
+            $groupBy .= "`{$col}`,";
+        }
+        $groupBy = substr($groupBy, 0, -1);
+        
+        $sql .=  $groupBy != '' ? ' GROUP BY ' . $groupBy : '';
+        
+        //ORDER BY clause
         $order = '';
         foreach($this->order as $o) {
             $order .= "{$o['column']} {$o['direction']},";
@@ -152,6 +178,13 @@ class Query {
 
         $sql .=  $this->limit != '' ? ' LIMIT ' . $this->limit : '';
 
+        foreach ($this->parameters as $key => $value) {
+            if (is_callable($value)) {
+                $v = $value($key);
+                $sql = str_replace(':' . $key, $v, $sql);
+                unset($this->parameters[$key]);
+            }
+        }
         return $sql;
 
     }
@@ -218,14 +251,22 @@ class Query {
      */
     private function prepareInsert()
     {
-        $sql = 'INSERT INTO ' . $this->insert;
+         $sql = 'INSERT INTO ' . $this->insert;
 
         $columns = '';
         $values = '';
         foreach ($this->values as $key => $value) {
 
-            $columns .= "{$key}, ";
-            $values .= ":val_{$key}, ";
+
+            if (is_callable($value)) {
+                $result = $value($key);
+                $columns .= "`{$key}`, ";
+                $values .= "{$result}, ";
+                unset($this->values[$key]);
+            } else {
+                $columns .= "`{$key}`, ";
+                $values .= ":val_{$key}, ";
+            }
         }
 
         $columns = substr($columns, 0, -2);
@@ -275,7 +316,11 @@ class Query {
         return $this;
     }
 
-
+    public function setFetchMode()
+    {
+        $this->fetchStyle = func_get_args();
+        return $this;
+    }
     /**
      * Store information about the class we want to fetch
      * @param string $className
@@ -316,10 +361,6 @@ class Query {
 
         $this->statement = $this->adapter->getPdo()->prepare($this->sql);
 
-
-       // print $this->sql . "\n";
-
-
         foreach ($this->parameters as $key => $value) {
             $this->statement->bindValue($key, $value);
         }
@@ -352,6 +393,9 @@ class Query {
 
         if ($this->fetchAsClass) {
             $this->statement->setFetchMode(\PDO::FETCH_CLASS, $this->fetchAsClass);
+        } else {
+            $callable = array($this->statement, 'setFetchMode');
+            call_user_func_array($callable, $this->fetchStyle);
         }
 
         $this->adapter->exec($this->statement);
@@ -419,7 +463,12 @@ class Query {
      */
     public function fetchAll()
     {
-        $result = $this->statement->fetchAll();
+        if (!$this->fetchAsClass) {
+            $callable = array($this->statement, 'fetchAll');
+            $result = call_user_func_array($callable, $this->fetchStyle);
+        } else {
+            $result = $this->statement->fetchAll();
+        }
         $this->statement->closeCursor();
         return $result;
     }
@@ -593,6 +642,19 @@ class Query {
             'column' => $column,
             'direction' => $direction,
         );
+        return $this;
+    }
+
+    /**
+     *
+     * Stores the GROUP BY info
+     * @author lyubomir.slavilov
+     * @param string $column
+     * @return \Flame\ORM\Query The current instance for chaining
+     */
+    public function groupBy($column)
+    {
+        $this->groupby[] = $column;
         return $this;
     }
 

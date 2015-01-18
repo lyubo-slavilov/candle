@@ -7,6 +7,8 @@
  */
 namespace Candle\Session;
 
+use Candle\Config;
+
 class Session {
 
     static private $instance;
@@ -29,10 +31,17 @@ class Session {
 
     public function __construct()
     {
+        session_set_cookie_params(0, '/', substr($_SERVER['HTTP_HOST'], strpos($_SERVER['HTTP_HOST'], ".")), false, true);
+        session_name(Config::get('app.session_name', 'CANDLE'));
         session_start();
         //TODO throw something on failure
     }
 
+    public function destroy()
+    {
+        session_destroy();
+        self::$instance = null;
+    }
     /**
      * Gets a value from the session
      * @param string $name

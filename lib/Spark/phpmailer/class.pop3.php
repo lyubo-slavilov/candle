@@ -380,7 +380,7 @@ class POP3 {
     echo '<pre>';
 
     foreach ($this->error as $single_error) {
-      print_r($single_error);
+      print_r($single_error); //ignore precommit
     }
 
     echo '</pre>';

@@ -54,7 +54,7 @@ class Generator {
 
         $url = preg_replace_callback('@:([a-zA-Z0-9\_\-]*)@', function($matches) use ($params, $asTemplate){
             if ($asTemplate) {
-                return '{' . $matches[1] . '}';
+                return ':' . $matches[1];
             } else {
                 if (isset($params[$matches[1]])) {
                     return $params[$matches[1]];
@@ -65,12 +65,17 @@ class Generator {
 
         }, $url);
 
-        $script = '';
+        $basePath = Config::get('app.base_path', '/');
+        $script = $basePath;
         if (! strpos($_SERVER['SCRIPT_NAME'], 'index.php')) {
-            $script = $_SERVER['SCRIPT_NAME'];
+            $script = $basePath . $_SERVER['SCRIPT_NAME'];
         }
 
+
+
         $url = "{$script}$url";
+        $url = str_replace('//', '/', $url);
+
         if ($absolute) {
             $protocol = !empty($_SERVER['HTTPS']) ? "https" : "http";
             $domain = Config::get('app.domain');

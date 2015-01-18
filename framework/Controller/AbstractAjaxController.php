@@ -12,7 +12,7 @@ abstract class AbstractAjaxController extends AbstractController
 
         $httpActions = $this->getHttpActionList();
 
-        $action = $this->getRequest()->getParam('action');
+        $action = $this->getCurrentAction();
 
         if (! in_array($action, $httpActions)) {
             $this->prepareForAjaxRequest();
@@ -22,12 +22,21 @@ abstract class AbstractAjaxController extends AbstractController
 
     public function afterExecute($result)
     {
+        $httpActions = $this->getHttpActionList();
 
-        $data = array(
-            'result' => $result
-        );
+        $action = $this->getCurrentAction();
 
-        return $this->json((object) $data, true);
+        if (! in_array($action, $httpActions)) {
+            $data = array(
+                'result' => $result
+            );
+
+            return $this->json((object) $data, true);
+        }
+
+        return parent::afterExecute($result);
+
+
     }
     protected function json(\stdClass $data, $success = true)
     {

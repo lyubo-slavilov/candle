@@ -73,6 +73,22 @@ class Request {
 
     }
 
+
+    private function filter($value)
+    {
+        if (is_array($value)) {
+            return $value;
+        }
+        switch (strtolower($value)) {
+            case 'false': return false;
+            case 'true': return true;
+            case 'null':
+            case 'undefined':
+            case 'nan': return null;
+        }
+        return $value;
+    }
+
     /**
      * Gets a parameter from $_GET
      * @param string $name Parameter name
@@ -82,7 +98,7 @@ class Request {
     public function get($name, $default = null)
     {
         if (isset($this->get[$name])) {
-            return $this->get[$name];
+            return $this->filter($this->get[$name]);
         } else {
             if (is_callable($default)) {
                 return $default->__invoke();
@@ -110,7 +126,7 @@ class Request {
     public function post($name, $default = null)
     {
         if (isset($this->post[$name])) {
-            return $this->post[$name];
+            return $this->filter($this->post[$name]);
         } else {
             if (is_callable($default)) {
                 return $default->__invoke();
@@ -143,7 +159,7 @@ class Request {
     public function getParam($name, $default = null)
     {
         if (isset($this->params[$name])) {
-            return $this->params[$name];
+            return $this->filter($this->params[$name]);
         } else {
             if (is_callable($default)) {
                 return $default->__invoke();

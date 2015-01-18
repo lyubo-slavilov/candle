@@ -15,8 +15,7 @@ $('ul.app-list .app').button().find('a').css({
 $('a.create-new-app').on('dialogSuccess', function(){
 	rad.panels.switchPanelTo($(this).closest('.ui-panel'), 'workarea');
 }).on('dialogError', function(event, response){
-	console.log(response);
-	rad.alert(response.responseText);
+	rad.alert(response.responseText); //ignore precommit
 	event.handled = true;
 })
 </script>

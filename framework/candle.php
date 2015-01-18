@@ -16,11 +16,11 @@ use Candle\Exception\BootstrapException;
 use Candle\Http\Request;
 
 if (CANDLE_ENVIRONMENT == 'prod') {
-    error_reporting(0);
-    ini_set('display_errors', 0);
+    error_reporting(0); //ignore precommit
+    ini_set('display_errors', 0); //ignore precommit
 } else if (CANDLE_ENVIRONMENT == 'dev') {
-    error_reporting(E_ALL);
-    ini_set('display_errors', 1);
+    error_reporting(E_ALL); //ignore precommit
+    ini_set('display_errors', 1); //ignore precommit
 }
 
 //Register the autoloaders
@@ -109,8 +109,11 @@ try {
         //InvalidControllerOrActionException
         //or BootstrapException
         //nothing can be done
+
+        $msg = CANDLE_ENVIRONMENT == 'dev' ? $ex->getMessage() : '';
+
         header("HTTP/1.1 {$fallbackHttpStatus}", true, $fallbackCode);
-        echo "<h1>HTTP {$fallbackHttpStatus}</h1>";
+        echo "<h1>HTTP {$fallbackHttpStatus}</h1>{$msg}";
     }
 }
 

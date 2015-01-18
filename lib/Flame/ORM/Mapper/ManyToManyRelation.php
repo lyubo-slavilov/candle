@@ -21,20 +21,22 @@ class ManyToManyRelation extends AbstractToManyRelation
     private $mappedByTable;
     private $table;
     private $targetEntFqn;
-    
-    public function __construct(AbstractEntity $owner, $table, $mappedByTable)
+    private $sortable = false;
+
+    public function __construct(AbstractEntity $owner, $table, $mappedByTable, $sortable = false)
     {
         $this->owner = $owner;
         $this->table = $table;
         $this->mappedByTable = $mappedByTable;
-        
+        $this->sortable = $sortable;
+
         $classParts = explode('\\', get_class($this->owner));
         array_pop($classParts);
-        
+
         $entClassName = str_replace(' ', '', ucwords(str_replace('_', ' ', $this->table)));
         $this->targetEntFqn = implode('\\', $classParts) . '\\' .   $entClassName;
     }
-    
+
     /**
      * Returns the fully qualified name of the target entity
      * @see \Flame\ORM\Mapper\AbstractToManyRelation::getTargetEntityFqn()
@@ -43,7 +45,7 @@ class ManyToManyRelation extends AbstractToManyRelation
     {
         return $this->targetEntFqn;
     }
-    
+
     /**
      * Executes a query for loading the entities partisipate in the relation
      * @see \Flame\ORM\Mapper\AbstractCollection::loadCollection()
@@ -53,30 +55,35 @@ class ManyToManyRelation extends AbstractToManyRelation
         if ($this->collectionLoaded) {
             return;
         }
-        
+
         $ot = $this->owner->getTable();
         $pk = $this->owner->getPk();
-        
+
         $mt = $this->mappedByTable;
         $mok = $this->owner->getTable() . '_' . $pk;
         $mfk = $this->table . '_' . $pk;
-        
+
         $ct = $this->table;
         $fk = 'id';
-        
+
         $entFqn = $this->targetEntFqn;
 
         $query = new Query(Flame::getAdapter());
         $query->select('c.*')
             ->from("{$ot} AS o INNER JOIN {$mt} AS m ON (o.{$pk} = m.{$mok}) LEFT JOIN {$ct} AS c ON (m.{$mfk} = c.{$fk})")
-            ->where("o.{$pk} = :pk")
-            ->setParam('pk', $this->owner->getPkValue())
+            ->where("o.{$pk} = :pk");
+
+        if ($this->sortable) {
+            $query->order('m.sort', 'DESC');
+        }
+
+        $query->setParam('pk', $this->owner->getPkValue())
             ->fetchAsClass($entFqn)
             ->execute();
-        
+
         $this->collection = $query->fetchAll();
         $this->collectionLoaded = true;
-        
+
     }
 
     /**
@@ -86,15 +93,15 @@ class ManyToManyRelation extends AbstractToManyRelation
     public function processChanges()
     {
         $needReset = false;
-        
+
         $pk = $this->owner->getPk();
         $mok = $this->owner->getTable() . '_' . $pk;
         $mfk = $this->table . '_' . $pk;
-        
+
         if (count($this->uowAttach) > 0) {
             $query = new Query(Flame::getAdapter());
             $query->insert($this->mappedByTable);
-            
+
             foreach ($this->uowAttach as $pkValue => $value) {
                 $query->values(array(
                     $mok => $this->owner->getPkValue(),
@@ -103,11 +110,11 @@ class ManyToManyRelation extends AbstractToManyRelation
             }
             $needReset = true;
         }
-        
+
         if (count($this->uowDetach) > 0) {
-            
+
             $keys = array_keys($this->uowDetach);
-            
+
             $query = new Query(Flame::getAdapter());
             $query
                 ->delete($this->mappedByTable)
@@ -115,10 +122,10 @@ class ManyToManyRelation extends AbstractToManyRelation
                 ->in($mfk, $keys)
                 ->setParam('mok', $this->owner->getPkValue())
                 ->execute();
-            
+
             $needReset = true;
         }
-        
+
         if ($needReset) {
             $this->reset();
         }

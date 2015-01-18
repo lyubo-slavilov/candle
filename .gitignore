@@ -2,3 +2,4 @@
 /.buildpath
 /.project
 cache
+app/config_dev.ini

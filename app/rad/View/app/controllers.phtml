@@ -10,12 +10,12 @@
     </div>
 <?php endforeach;?>
 </div>
-<a class="create-controller" style="float:right;" href="#" title="Create Controller" data-action="dialog" data-source="{{url('ctrl-new')}}?app={{app}}">New</a>
+<a class="create-controller" style="float:right;" href="javascript:void(false);" title="Create Controller" data-action="dialog" data-source="{{url('ctrl-new')}}?app={{app}}">New</a>
 <script>
 
 
 $('a.create-controller').on('dialogSuccess', function(){
-	$('.appcontent').load('{{url("app-default", ["app": $app, "action": "controllers"])}}');
+	$('.appcontent').load('{{url("app-default", ["app": $this.app, "action": "controllers"])}}');
 });
 $('.app-controllers .rad-selectable').radselectable();
 $('.app-controllers').accordion({

@@ -155,6 +155,7 @@ class Bootstrap {
                     $template =  CANDLE_APP_DIR . "/View/{$c}/{$t}.phtml";
                 }
             }
+            
             $view = new View($actionParams);
             $content =  $view->render($template);
         } else {

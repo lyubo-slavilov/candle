@@ -169,6 +169,7 @@ class Router {
         $this->tryRedirect();
 
         $route = $request->getParam('route');
+        $route = str_replace(Config::get('app.base_path'), '/', $route);
 
         foreach ($this->rules as $rule) {
             $pattern = $rule->pattern;

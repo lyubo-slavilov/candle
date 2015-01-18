@@ -22,7 +22,7 @@ abstract class AbstractController {
     private $templateName = '';
     private $controllerName = '';
     private $layoutName = '';
-
+    private $currentAction = '';
     /**
      * Quck request access
      * Getter for easy request intance access
@@ -33,6 +33,10 @@ abstract class AbstractController {
         return Request::getInstance();
     }
 
+    protected function getCurrentAction()
+    {
+        return $this->currentAction;
+    }
     /**
      * Quck response access
      * Getter for easy response intance access
@@ -117,10 +121,11 @@ abstract class AbstractController {
      */
     public final function execute($actionName)
     {
-
-        $this->beforeExecute();
+        $this->currentAction = $actionName;
         try {
+            $this->beforeExecute();
             $result = $this->$actionName();
+            $result = $this->afterExecute($result);
         } catch (\Exception $e) {
             $result = $this->processActionException($e);
             if ($result instanceof \Exception) {
@@ -128,7 +133,6 @@ abstract class AbstractController {
             }
         }
 
-        $result = $this->afterExecute($result);
 
         return $result;
     }

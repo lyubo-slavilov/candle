@@ -17,7 +17,7 @@ class Config
 
     static public function debug()
     {
-        print_r(self::$config);
+        print_r(self::$config); //ignore precommit
     }
 
     static public function readFile($filename)
@@ -40,6 +40,20 @@ class Config
         self::loadFromFile(__DIR__ . '/config/config.ini');
         self::loadFromFile(CANDLE_APP_BASE_DIR . '/config.ini');
         self::loadFromFile(CANDLE_APP_DIR . '/config.ini');
+
+
+        //load dev configurations
+        if (CANDLE_ENVIRONMENT == 'dev') {
+            if (file_exists(CANDLE_APP_BASE_DIR . '/config_dev.ini')) {
+                self::loadFromFile(CANDLE_APP_BASE_DIR . '/config_dev.ini');
+            }
+            if (file_exists(CANDLE_APP_DIR . '/config_dev.ini')) {
+                self::loadFromFile(CANDLE_APP_DIR . '/config_dev.ini');
+            }
+        }
+
+        self::$loaded = true;
+
     }
 
     static public function get($name, $default = null) {
