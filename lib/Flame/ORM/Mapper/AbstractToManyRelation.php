@@ -13,9 +13,34 @@ abstract class AbstractToManyRelation extends AbstractCollection {
     protected $uowDetach  = array();
     protected $collectionLoaded = false;
     
+    private $lastSort = null;
     abstract public function processChanges();
     abstract public function getTargetEntityFqn();
     
+    public function sort($col, $dir = 'ASC') {
+        
+        $this->loadCollection();
+        if ($this->lastSort == $col . '-' . strtoupper($dir)) {
+            return $this;
+        }
+        if (strtoupper($dir) == 'DESC') {
+            $sorter = function($ent1, $ent2) use ($col){
+                return $ent1->{$col} > $ent2->{$col} ? -1 : ($ent1->$col == $ent2->{$col} ? 0 : 1);  
+            };
+        } else {
+            $dir = 'ASC';
+            $sorter = function($ent1, $ent2) use ($col){
+                return $ent1->{$col} < $ent2->{$col} ? -1 : ($ent1->{$col} == $ent2->{$col} ? 0 : 1);  
+            };
+            
+        }
+        usort($this->collection, function($ent1, $ent2) use ($sorter){
+            return $sorter($ent1, $ent2);
+        });
+        
+        $this->lastSort = $col . '-' . strtoupper($dir);
+        return $this;
+    }
     
     /**
      * Resets all the collection settings

@@ -32,7 +32,13 @@ abstract class AbstractController {
     {
         return Request::getInstance();
     }
-
+    
+    protected function getControllerName()
+    {
+        $parts = explode('\\', get_class($this));
+        return array_pop($parts);
+    }
+    
     protected function getCurrentAction()
     {
         return $this->currentAction;
@@ -241,5 +247,10 @@ abstract class AbstractController {
     protected function processActionException(\Exception $e)
     {
         return $e;
+    }
+    
+    protected function service($name, $newInstance = false)
+    {
+        return Container::get($name, $newInstance);
     }
 }

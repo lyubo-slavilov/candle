@@ -213,4 +213,9 @@ abstract class AbstractRepository {
             ->execute()
             ->fetchAll();
     }
+    
+    protected function createQuery()
+    {
+        return new Query($this->adapter);
+    }
 }

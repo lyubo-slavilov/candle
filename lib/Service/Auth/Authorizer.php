@@ -37,27 +37,6 @@ class Authorizer {
 
     }
 
-
-    public function initFromSsoData($data)
-    {
-        try {
-            $userEnt = Flame::getRepo('User')->findSingleBy(array(
-                'username' => $data->userName
-            ));
-
-        } catch (EmptyResultException $ex) {
-            $userEnt = new User();
-            $userEnt->setUsername($data->userName);
-            $userEnt->setSalt('notused');
-            $userEnt->setPassword('notused');
-            $userEnt->save();
-        }
-
-        self::$user = $userEnt;
-        $session = Session::getInstance();
-        $session->set('user', $userEnt);
-    }
-
     public function getUser()
     {
         $user = $this->checkSession();

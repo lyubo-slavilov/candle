@@ -56,9 +56,9 @@ abstract class AbstractAjaxController extends AbstractController
         $this->setLayout(false);
     }
 
-    protected function stopExecution($message, $code = null)
+    protected function stopExecution($message, $code = null, $codeMessage = '')
     {
-        throw new AjaxResponseException($message, $code);
+        throw new AjaxResponseException($message, $code, $codeMessage);
     }
 
     protected function processActionException(\Exception $e)
@@ -66,11 +66,24 @@ abstract class AbstractAjaxController extends AbstractController
         if ($e instanceof AjaxResponseException) {
 
             $this->getResponse()->setStatus(400, 'USER ERROR');
-
-            $data = (object) array(
-                'message' => $e->getMessage(),
-                'code' => $e->getCode()
-            );
+            if (CANDLE_ENVIRONMENT == 'dev') {
+                $data = (object) array(
+                    'message' => $e->getMessage(),
+                    'dev' => true,
+                    'code' => $e->getCode(),
+                    'code_message' => 'Manual execution stop',
+                    'trace' => str_replace(CANDLE_INSTALL_DIR, '(install dir)', $e->getTraceAsString())
+                );
+            } else {
+                $data = (object) array(
+                    'code' => 'Ups.',
+                    'code_message' => 'Something went wrong.',
+                    'message' => 'We are trying our best to resolve the problem',
+                    'trace' => 'Please try again later',
+                    'dev' => false,
+                );
+                
+            }
 
             return $this->json($data, false);
         } else {
