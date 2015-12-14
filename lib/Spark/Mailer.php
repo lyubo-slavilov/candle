@@ -35,12 +35,12 @@ class Mailer {
 
         $mailer->IsSMTP();
 
-        $mailer->SMTPAuth   = self::$cfg['smtpauth'];
-        $mailer->SMTPSecure = self::$cfg['smtpsecure'];
-        $mailer->Host       = self::$cfg['host'];
-        $mailer->Port       = self::$cfg['port'];
-        $mailer->Username   = self::$cfg['username'];
-        $mailer->Password   = self::$cfg['password'];
+        $mailer->SMTPAuth   = self::$cfg->smtpauth;
+        $mailer->SMTPSecure = self::$cfg->smtpsecure;
+        $mailer->Host       = self::$cfg->host;
+        $mailer->Port       = self::$cfg->port;
+        $mailer->Username   = self::$cfg->username;
+        $mailer->Password   = self::$cfg->password;
         $mailer->CharSet = 'utf-8';
         return $mailer;
 

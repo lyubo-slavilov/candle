@@ -10,6 +10,7 @@
 namespace Candle\Http;
 
 use Service\Utils;
+use Candle\Event\Dispatcher;
 
 class Response {
     
@@ -127,14 +128,17 @@ class Response {
     public function send()
     {
         
+        $payload = Dispatcher::filter('response.content', ['content' => $this->content]);
+        $content = $payload->get('content');
+        
         header("HTTP/1.1 {$this->status['code']}: {$this->status['message']}", true, $this->status['code']);
         foreach ($this->headers as $header) {
-            header(header);
+            header($header);
         }
         
         header('Content-type: ' . $this->contentType . '; charset=' . $this->charset, true);
         
-        echo $this->content;
+        echo $content;
             
     }
 }

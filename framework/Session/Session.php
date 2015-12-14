@@ -8,6 +8,7 @@
 namespace Candle\Session;
 
 use Candle\Config;
+use Candle\Event\Dispatcher;
 
 class Session {
 
@@ -31,10 +32,30 @@ class Session {
 
     public function __construct()
     {
-        session_set_cookie_params(0, '/', substr($_SERVER['HTTP_HOST'], strpos($_SERVER['HTTP_HOST'], ".")), false, true);
-        session_name(Config::get('app.session_name', 'CANDLE'));
+        Dispatcher::fire('session.beforeStart');
+        
+        $sessionConfig = [
+           'name' => Config::get('session.name', 'CANDLE'),
+           'lifetime' => Config::get('session.lifetime', 0),
+           'path' => Config::get('session.path', '/'),
+           'domain' => Config::get('session.domain', ''),
+           'secure' => Config::get('session.secure', false),
+           'httponly' => Config::get('session.httponly', true),
+        ];
+        
+        $payload = Dispatcher::filter('session.config', $sessionConfig);
+        
+        session_name($payload->get('name'));
+        session_set_cookie_params(
+                $payload->get('lifetime'),
+                $payload->get('path'),
+                $payload->get('domain'),
+                $payload->get('secure'),
+                $payload->get('httponly')
+        );
         session_start();
-        //TODO throw something on failure
+        
+        Dispatcher::fire('session.start');
     }
 
     public function destroy()

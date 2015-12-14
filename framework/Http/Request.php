@@ -10,6 +10,7 @@
  */
 namespace Candle\Http;
 
+use Candle\Event\Dispatcher;
 class Request {
 
     const METHOD_GET = 'GET';
@@ -70,7 +71,8 @@ class Request {
         $route = str_replace($_SERVER['SCRIPT_NAME'], '', $route);
         $this->setParam('route', $route);
 
-
+        Dispatcher::fire('request.constructed', ['request' => $this]);
+        
     }
 
 

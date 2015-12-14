@@ -53,7 +53,7 @@ class Polymer
         }
 
         if (file_exists(CANDLE_WEB_DIR . '/polymer/' . $path)) {
-            $base = Config::get('app.base_path');
+            $base = Config::get('app.basePath');
             $dir = dirname($path);
             $content = file_get_contents(CANDLE_WEB_DIR . '/polymer/' . $path);
             $that = $this;
@@ -135,7 +135,7 @@ class Polymer
 //             $weldedContent = print_r($this->resourceBuffer, true) . $weldedContent;
             file_put_contents($cachedFilePath, $weldedContent);
         }
-        $base = Config::get('app.base_path');
+        $base = Config::get('app.basePath');
         echo "<link rel=\"import\" href=\"{$base}polymer/weld/{$cachedFile}\">";
     }
 }

@@ -14,13 +14,14 @@ use Candle\Exception\HttpRedirectException;
 use Candle\Exception\BootstrapException;
 
 use Candle\Http\Request;
+use Candle\Event\Dispatcher;
 
 if (CANDLE_ENVIRONMENT == 'prod') {
-    error_reporting(0); //ignore precommit
-    ini_set('display_errors', 0); //ignore precommit
+    error_reporting(0); 
+    ini_set('display_errors', 0); 
 } else if (CANDLE_ENVIRONMENT == 'dev') {
-    error_reporting(E_ALL); //ignore precommit
-    ini_set('display_errors', 1); //ignore precommit
+    error_reporting(E_ALL); 
+    ini_set('display_errors', 1);
 }
 
 //Register the autoloaders
@@ -49,11 +50,14 @@ function candleExec($controller, $action = null)
 
     $bootstrap->run($controller, $action);
     $content = ob_get_clean();
-
+    
+    Dispatcher::fire('response.beforeSend');
+    
     //ob_end_clean();
     $resp = Response::getInstance();
-    Response::getInstance()->setContent($content);
-    Response::getInstance()->send();
+    
+    $resp->setContent($content);
+    $resp->send();
 }
 
 
@@ -70,6 +74,27 @@ if (CANDLE_ENVIRONMENT == 'dev') {
 //Try to run the framework
 try {
 
+    Dispatcher::start();
+    Dispatcher::subscribe('\Candle\Event\Candle\CandleSubscriber');
+    
+    try {
+        $subscribers = Config::get('event.subscribers', false);
+        
+        if (is_array($subscribers)) {
+            foreach($subscribers as $subscriberName) {
+                $fqn = ucfirst(CANDLE_APP_NAME) . '\\Subscriber\\' . ucfirst($subscriberName);
+                Dispatcher::subscribe($fqn);
+            }
+        }
+    } catch (\Exception $e) {
+        if (CANDLE_ENVIRONMENT == 'dev') {
+            die($e);
+        } else {
+            throw $e;
+        }
+    }
+    
+  
     $request = Request::getInstance();
 
     include CANDLE_APP_DIR . '/routes.php';
@@ -82,6 +107,7 @@ try {
 
 } catch (\Exception $ex) {
 
+    $request = Request::getInstance();
     //Deal with exceptions
 
     if (ob_get_level()) {

@@ -10,7 +10,7 @@ namespace Candle\Controller;
 
 use Candle\Exception\Error404Exception;
 
-use Candle\View\View;
+use Wick\View;
 use Candle\Url\Generator;
 use Candle\Http\Response;
 use Candle\Http\Request;

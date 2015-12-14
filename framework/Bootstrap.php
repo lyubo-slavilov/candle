@@ -19,11 +19,13 @@ use Candle\Exception\ControllerForwardException;
 
 use Candle\Http\Request;
 
-use Candle\View\View;
+use Wick\View;
 
 use Candle\Controller\AbstractController;
 
 use Candle\Exception\Error404Exception;
+use Candle\Event\Dispatcher;
+
 
 class Bootstrap {
 
@@ -33,6 +35,12 @@ class Bootstrap {
     private $controller;
     private $isComponentCalling;
 
+    
+    private function getAppFqnPath()
+    {
+        return ucfirst(basename(CANDLE_APP_DIR));
+    }
+    
     /**
      * Controller factory
      *
@@ -45,12 +53,8 @@ class Bootstrap {
      */
     private function createController($controllerName)
     {
-        $namespacePrefix = ucfirst(basename(CANDLE_APP_DIR));
-        $controllerClassName = $namespacePrefix . '\\Controller\\' . ucfirst($this->controllerName) . 'Controller';
-
-
-
-        $controllerFile = CANDLE_APP_DIR . '/Controller/' .$controllerName . 'Controller.php';
+        $appFqn = $this->getAppFqnPath();
+        $controllerClassName = $appFqn . '\\Controller\\' . ucfirst($this->controllerName) . 'Controller';
 
 
         try {
@@ -75,16 +79,23 @@ class Bootstrap {
     private function forward(ControllerForwardException $forwardException)
     {
         $request = Request::getInstance();
-        $forwardChain = $request->getParam('forward_chain', array());
+        $forwardChain = $request->getParam('forwardChain', array());
         if (count($forwardChain) > 5) {
             throw new BootstrapException('Too many forwards');
         }
 
         $forwardChain[] = $this->controller;
-        $request->setParam('forward_chain', $forwardChain);
-        $request->setParam('forward_params', $forwardException->getParams());
-        $request->setParam('is_forward', true);
+        $request->setParam('forwardChain', $forwardChain);
+        $request->setParam('forwardParams', $forwardException->getParams());
+        $request->setParam('isForwarded', true);
+        
         return $this->run($forwardException->getController(), $forwardException->getAction());
+    }
+    
+    
+    private function registerWickExtensions()
+    {
+        
     }
 
     /**
@@ -98,6 +109,17 @@ class Bootstrap {
      */
     public function run($controllerName, $actionName=null, $isComponentCalling = false) {
 
+        $request = Request::getInstance();
+
+        Dispatcher::fire('bootstrap.boot', [
+            'controllerName' => $controllerName,
+            'actionName' => $actionName,
+            'isComponentCalling' => $isComponentCalling,
+            'isReboot' => $request->getParam('isForwarded', false),
+        ]);
+        if (! $isComponentCalling) {
+            $this->registerWickExtensions();
+        }
 
         if (is_null($actionName)) {
             list($controllerName, $actionName) = explode('::', $controllerName);
@@ -124,6 +146,7 @@ class Bootstrap {
         try {
 
             $renderParams = $this->controller->execute($actionName);
+
             $content = $this->renderResult($renderParams);
             return $content;
 
@@ -162,19 +185,18 @@ class Bootstrap {
             $content = $actionParams;
         }
 
-
         if ($layout !== false && !$this->isComponentCalling) {
-
 
             if($layout != '') {
                 $layout = CANDLE_APP_DIR . '/View/' . $layout;
             } else {
-                $layout = CANDLE_APP_DIR . '/View/' . Config::get('wick.default_layout');
+                $layout = CANDLE_APP_DIR . '/View/' . Config::get('wick.defaultLayout');
             }
             $layoutView = new View(array(
                     'candle_content' => $content
             ));
             $content = $layoutView->render($layout);
+
         }
         if (! empty($content)) {
             echo $content;

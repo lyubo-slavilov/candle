@@ -65,7 +65,7 @@ class Router {
 
         $rule->exportable = $exportable;
 
-        $baseRoute = Config::get('app.base_route', '');
+        $baseRoute = Config::get('app.baseRoute', '');
         $pattern = $baseRoute . $pattern;
         $lastChar = substr($pattern, -1);
 
@@ -146,8 +146,10 @@ class Router {
         $url = $domain . '/' .$uri;
 
 
-        $redirects = Config::get('redirect');
-
+        $redirects = Config::get('redirect', null);
+        if (is_null($redirects)) {
+            return;
+        }
         foreach ($redirects as $from => $to) {
 
             if (preg_match('/^' . $from .'$/i', $domain)) {
@@ -169,7 +171,7 @@ class Router {
         $this->tryRedirect();
 
         $route = $request->getParam('route');
-        $route = str_replace(Config::get('app.base_path'), '/', $route);
+        $route = str_replace(Config::get('app.basePath'), '/', $route);
 
         foreach ($this->rules as $rule) {
             $pattern = $rule->pattern;

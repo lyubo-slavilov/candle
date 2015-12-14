@@ -2,35 +2,43 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html>
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title>Candle Demo Site</title>
-<link type="text/css" rel="stylesheet" href="/css/layout.css" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Candle Demo Site</title>
+    <?php 
+        $this->a = [
+            'foo' => ['bar'=>1,'baz'=>2]
+        ];
+    ?>
+    {{welder('assets').js('bower_components/webcomponentsjs/webcomponents.min.js')|@}}
+    <script>
+        window.Polymer = window.Polymer || {};
+        window.Polymer.dom = 'shadow';
+    </script>
+    
+    
+    {{polymer('paper-card')}}
+    {{polymer('paper-drawer-panel')}}
+    {{polymer('paper-header-panel')}}
+    
+    <link type="text/css" rel="stylesheet" href="/css/layout.css" />
 
+    <link rel="import" href="{{src('css/custom-style.html')}}">
+    <style is="custom-style" include="custom-style"></style>
+    
+   
 </head>
 <body>
-    <div id="maincontainer">
-
-        <div id="topsection">
-            <div class="innertube">
-                <h1>Candle Demo</h1>
-                <small><?php echo CANDLE_ENVIRONMENT == 'prod' ? 'production mode' : '<span style="color:darkred">development mode</span>'?></small>
-            </div>
+   <div class="header">
+        Header
+   </div>
+    <paper-drawer-panel>
+        <div drawer>
+            foo
         </div>
-
-        <div id="contentwrapper">
-            <div id="contentcolumn">
-                <div class="innertube">
-                    <?php echo $this->candle_content; ?>
-                </div>
-            </div>
+        <div main>
+            {{candle_content_raw}}
         </div>
-
-        <div id="leftcolumn">
-            <div class="innertube">Menu</div>
-        </div>
-
-        <div id="footer">Footer</div>
-
-    </div>
+    
+    </paper-drawer-panel>
 </body>
 </html>

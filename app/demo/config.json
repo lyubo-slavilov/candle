@@ -1,0 +1,16 @@
+{
+    "app": {
+        "assetsDir": "/demo"
+    },
+    "meta": {
+        "title": "Your title",
+        "description": "Your description",
+        "keywords": "some key words"
+    },
+    
+    "wick": {
+        "error404": "main::error404",
+        "error500": "main::error404",
+        "defaultLayout": "layout.phtml"
+    }
+}

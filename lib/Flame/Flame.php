@@ -29,11 +29,11 @@ class Flame {
        if (empty($cfg)) {
            $cfg = Config::get('flame');
        }
-       $dsn = "{$cfg['driver']}:dbname={$cfg['dbname']};host={$cfg['host']}";
+       $dsn = "{$cfg->driver}:dbname={$cfg->dbname};host={$cfg->host}";
 
        if (! isset(self::$adapters[$dsn])) {
            self::$adapters[$dsn] = new Adapter();
-           self::$adapters[$dsn]->connect($dsn, $cfg['user'], $cfg['pass']);
+           self::$adapters[$dsn]->connect($dsn, $cfg->user, $cfg->pass);
        }
 
        return self::$adapters[$dsn];

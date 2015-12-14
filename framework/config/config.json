@@ -1,0 +1,13 @@
+{
+    "flame": {
+        "driver": "myslq",
+        "host": "localhost",
+        "dbname": "",
+        "user": "",
+        "pass": ""
+    },
+    "wick": {
+        "defaultLayout": "layout.phtml"
+    },
+    "some": "@import(some_config.json)"
+}

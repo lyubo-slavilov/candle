@@ -65,7 +65,7 @@ class Generator {
 
         }, $url);
 
-        $basePath = Config::get('app.base_path', '/');
+        $basePath = Config::get('app.basePath', '/');
         $script = $basePath;
         if (! strpos($_SERVER['SCRIPT_NAME'], 'index.php')) {
             $script = $basePath . $_SERVER['SCRIPT_NAME'];
