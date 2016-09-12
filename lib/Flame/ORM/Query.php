@@ -282,7 +282,7 @@ class Query {
                     $set .= "{$key} = {$result}, ";
                     unset($this->onduplicate[$key]);
                 } else {
-                    $set = "{$key} = :dpk_{$key}, ";
+                    $set .= "{$key} = :dpk_{$key}, ";
 
                 }
             }
